@@ -1,0 +1,2723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>"Native Diggers" Tools and Treasures</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sat: env(safe-area-inset-top, 0px);
+      --sab: env(safe-area-inset-bottom, 0px);
+      --sal: env(safe-area-inset-left, 0px);
+      --sar: env(safe-area-inset-right, 0px);
+    }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    body {
+      font-family: 'Silkscreen', monospace;
+      image-rendering: pixelated;
+      background-color: #08090d;
+      color: #e5e7eb;
+      user-select: none;
+      -webkit-user-select: none;
+      padding-top: var(--sat);
+      padding-bottom: calc(var(--sab) + 4.8rem);
+      padding-left: var(--sal);
+      padding-right: var(--sar);
+      overflow-x: hidden;
+    }
+    .font-pixel { font-family: 'Press Start 2P', cursive; }
+    .font-term { font-family: 'VT323', monospace; }
+    input, select, textarea { font-size: 16px !important; }
+    
+    .pixel-box {
+      border: 3px solid #1f2737;
+      box-shadow: inset 2px 2px 0px #323d54, inset -2px -2px 0px #0e121a, 0 4px 10px rgba(0,0,0,0.6);
+      background-color: #11151f;
+    }
+    .pixel-inset {
+      border: 2px solid #0d1117;
+      box-shadow: inset 2px 2px 0px #040609, inset -2px -2px 0px #1e2638;
+      background-color: #090c12;
+    }
+    .pixel-btn {
+      position: relative;
+      border: 2px solid #0c1017;
+      box-shadow: inset 2px 2px 0px rgba(255,255,255,0.18), inset -2px -2px 0px rgba(0,0,0,0.5), 0 3px 0 #05070a;
+      transition: transform 0.05s ease;
+    }
+    .pixel-btn:active {
+      transform: translateY(2px);
+      box-shadow: inset 2px 2px 0px rgba(0,0,0,0.5), inset -2px -2px 0px rgba(255,255,255,0.15), 0 1px 0 #05070a;
+    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #080a0f; }
+    ::-webkit-scrollbar-thumb { background: #2a3449; border-radius: 2px; }
+
+    /* Animated pulse badge for caches */
+    @keyframes glow-amber {
+      0%, 100% { box-shadow: 0 0 5px rgba(245, 158, 11, 0.4); }
+      50% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.9); }
+    }
+    .glow-cache { animation: glow-amber 1.5s infinite; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-black">
+
+  <!-- TOP HEADER HUD -->
+  <header class="bg-[#0e121b] border-b-2 border-stone-800 p-2.5 px-3 flex items-center justify-between sticky top-0 z-40 backdrop-blur">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded bg-[#171d2b] border border-amber-500/70 flex items-center justify-center text-lg shadow-inner">
+        ⛏️
+      </div>
+      <div>
+        <h1 class="font-pixel text-[10px] sm:text-xs text-amber-400 tracking-wider">"NATIVE DIGGERS"</h1>
+        <p class="text-[8px] sm:text-[9px] text-cyan-300 font-mono">TOOLS & TREASURES • HEARTLAND TRAIL</p>
+      </div>
+    </div>
+
+    <!-- Live Stats -->
+    <div class="flex items-center gap-2 text-xs">
+      <div class="bg-[#080b10] border border-stone-700 px-2.5 py-1 rounded flex items-center gap-1.5">
+        <span class="text-amber-400 font-mono text-[9px]">FUNDS:</span>
+        <span id="stat-money" class="font-mono font-bold text-emerald-400">$450</span>
+      </div>
+      <div class="bg-[#080b10] border border-stone-700 px-2 py-1 rounded flex items-center gap-1">
+        <span class="text-stone-400 font-mono text-[9px]">BAG:</span>
+        <span id="stat-bag-count" class="font-mono font-bold text-cyan-300">0/35</span>
+      </div>
+      <button id="btn-sound" onclick="toggleAudio()" class="pixel-btn bg-stone-800 px-2 py-1 text-[10px] text-stone-200" title="Toggle 8-bit Audio">
+        🔊
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN INTERACTIVE CONTAINER -->
+  <main class="flex-1 w-full max-w-5xl mx-auto p-2 sm:p-4 space-y-3">
+
+    <!-- 1. HEARTLAND EXPEDITION & HUNTING GROUNDS -->
+    <section id="tab-hunt" class="space-y-3">
+      <!-- Location Selector & Scan Bar -->
+      <div class="pixel-box p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+        <div>
+          <div class="text-[10px] font-pixel text-amber-400 mb-1 flex items-center gap-2">
+            <span>🗺️ MIDWEST HUNTING TERRITORY</span>
+            <span id="hunt-region-badge" class="bg-cyan-950 text-cyan-300 border border-cyan-600/50 text-[8px] px-2 py-0.5 rounded">OHIO VALLEY</span>
+          </div>
+          <select id="select-hunt-site" onchange="onHuntSiteChange()" class="w-full sm:w-auto bg-[#070a0f] text-cyan-300 border border-stone-700 p-2 rounded text-xs focus:outline-none">
+            <option value="flintridge">Flint Ridge Quarry Pits (Licking Co., Ohio) [Gem Chalcedony Trail]</option>
+            <option value="scioto">Scioto River Floodplain (Ross Co., Ohio) [Adena & Hopewell Terraces]</option>
+            <option value="cahokia">Cahokia Creek Alluvials (Illinois Basin) [Mississippian Blades & Celts]</option>
+            <option value="wabash">Wabash Lowland Bluffs (Indiana / Kentucky) [Hornstone Archaic Camps]</option>
+            <option value="ozarks">Ozark Escarpment Overhang (Missouri/Arkansas) [Novaculite & Paleo Shelters]</option>
+          </select>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="resetExpeditionGrid(true)" class="pixel-btn flex-1 sm:flex-none bg-emerald-800 hover:bg-emerald-700 text-white text-[11px] px-3.5 py-2 rounded font-bold">
+            🔄 Scout New Field ($15)
+          </button>
+          <button onclick="forceCacheInCurrentField()" class="pixel-btn bg-stone-800 text-amber-400 hover:text-amber-200 text-xs px-2.5 py-2 rounded" title="God-Mode: Seed Cache In Next Tile">
+            ⚡
+          </button>
+        </div>
+      </div>
+
+      <!-- Soil Grid Matrix + Live Journal -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+        <!-- Grid View -->
+        <div class="md:col-span-7 pixel-box p-3 flex flex-col items-center">
+          <div class="w-full flex justify-between items-center text-[10px] text-stone-400 mb-2 font-mono">
+            <span>DEPOSITS DETECTED: <span id="hunt-detected-label" class="text-amber-400 font-bold">--</span></span>
+            <span>TAPS REMAINING: <span id="hunt-taps-label" class="text-cyan-300 font-bold">22</span></span>
+          </div>
+
+          <div class="w-full flex justify-center bg-[#05070a] p-2.5 rounded border border-stone-800 shadow-inner">
+            <div id="hunt-grid-container" class="grid grid-cols-6 sm:grid-cols-8 gap-1.5 max-w-full">
+              <!-- Interactive Soil Tiles Generated by Script -->
+            </div>
+          </div>
+
+          <div class="w-full mt-2 text-[10px] text-stone-400 flex flex-wrap justify-between items-center px-1">
+            <span>⛏️ Tap gravel to uncover flakes or chipped edges!</span>
+            <span class="text-amber-300 font-mono text-[9px]">CACHE CHANCE: UNCOVER 4-20 AT ONCE!</span>
+          </div>
+        </div>
+
+        <!-- Field Log & Last Recovery -->
+        <div class="md:col-span-5 pixel-box p-3 flex flex-col justify-between space-y-2.5">
+          <div>
+            <div class="font-pixel text-[10px] text-amber-400 pb-1 border-b border-stone-800 mb-1.5 flex justify-between items-center">
+              <span>EXPEDITION SENSOR LOG</span>
+              <span class="text-emerald-400 text-[8px] font-mono">FIELD SENSORS ONLINE</span>
+            </div>
+            <div id="hunt-journal-log" class="font-term text-base bg-[#07090e] border border-stone-800 p-2 h-44 overflow-y-auto space-y-1 text-stone-300 rounded leading-tight">
+              <div class="text-stone-500">> Boots hit gravel. Walking plowed Midwestern farm terrace.</div>
+              <div class="text-stone-500">> Fresh rain has washed away topsoil revealing chert debitage.</div>
+            </div>
+          </div>
+
+          <!-- Mini Inspection Card -->
+          <div class="pixel-inset p-2 rounded flex items-center gap-3">
+            <div class="w-16 h-16 bg-[#040508] border border-stone-700 rounded flex items-center justify-center shrink-0">
+              <canvas id="canvas-last-recovery" width="64" height="64" class="w-16 h-16"></canvas>
+            </div>
+            <div class="text-xs space-y-0.5 overflow-hidden">
+              <div class="text-[8px] font-mono text-cyan-400">MOST RECENT FIELD EXTRACTION</div>
+              <div id="last-find-name" class="font-bold text-amber-300 truncate">No piece recovered yet</div>
+              <div id="last-find-meta" class="text-[10px] text-stone-400 truncate">Overturn soil squares to recover lithics.</div>
+              <div id="last-find-val" class="text-emerald-400 font-bold font-mono text-xs"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. ANCIENT CACHE EXCAVATION EVENT (4 to 20 Relics in One Pit) -->
+    <section id="tab-cache" class="hidden space-y-3">
+      <div class="pixel-box p-3 sm:p-4 border-2 border-amber-500 glow-cache bg-gradient-to-b from-[#1b1914] to-[#10131c]">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-amber-600/40 pb-2">
+          <div>
+            <div class="font-pixel text-xs sm:text-sm text-amber-300 flex items-center gap-2">
+              <span class="animate-bounce">⚡</span> PREHISTORIC ARTIFACT CACHE UNCOVERED!
+            </div>
+            <div id="cache-title" class="text-xs text-cyan-300 mt-0.5 font-mono">
+              Scioto Valley Hopewell Ceremonial Blade Cache
+            </div>
+          </div>
+          <div class="text-xs font-mono bg-black/60 border border-amber-500 px-3 py-1 rounded text-amber-300">
+            CACHE BUNDLE: <span id="cache-bundle-tally" class="text-emerald-400 font-bold">12 RELICS</span>
+          </div>
+        </div>
+
+        <p id="cache-description" class="text-xs text-stone-300 italic mt-2.5 bg-[#090b10] p-3 rounded border border-stone-800 leading-relaxed">
+          Tucked tightly inside a clay-lined silt pocket along a dried stream meander, an ancient hunter's ritual toolkit has laid undisturbed for over two thousand years. Brush away gravel and extract every single specimen!
+        </p>
+
+        <!-- Pit Matrix -->
+        <div class="mt-3 bg-[#06080d] p-3 rounded border border-stone-800">
+          <div class="flex justify-between items-center text-xs mb-2">
+            <span class="text-stone-400 text-[10px] font-mono">EXCAVATION BED: TAP UNCLEARED GRAVEL CLUSTERS</span>
+            <span id="cache-progress-pct" class="text-cyan-300 font-mono font-bold">0% Cleared</span>
+          </div>
+
+          <div id="cache-grid" class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2 max-h-[380px] overflow-y-auto p-2 bg-[#040508] rounded border border-stone-800">
+            <!-- Dynamic Cache Relics -->
+          </div>
+        </div>
+
+        <!-- Claim Action -->
+        <div class="mt-3 flex flex-wrap gap-2 justify-end">
+          <button onclick="claimCompleteCache()" id="btn-claim-cache" class="pixel-btn bg-emerald-700 hover:bg-emerald-600 text-white text-xs px-4 py-2.5 rounded font-bold">
+            🎒 Safely Bag Entire Recovered Cache
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. BAG INVENTORY & SPECIMEN INSPECTOR -->
+    <section id="tab-inventory" class="hidden space-y-3">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+        <!-- Inventory List Column -->
+        <div class="md:col-span-7 pixel-box p-3">
+          <div class="flex justify-between items-center mb-2 pb-1.5 border-b border-stone-800">
+            <div class="font-pixel text-[10px] sm:text-xs text-amber-300">COLLECTED TOOLS & RELICS</div>
+            <div class="text-[10px] text-stone-400 font-mono">CAPACITY: <span id="inv-capacity-counter" class="text-white font-bold">0/35</span></div>
+          </div>
+
+          <!-- Quick Filters -->
+          <div class="flex flex-wrap gap-1 mb-2.5 text-[9px]">
+            <button onclick="setInvCategoryFilter('all')" class="pixel-btn bg-stone-800 text-stone-200 px-2.5 py-1 rounded">ALL</button>
+            <button onclick="setInvCategoryFilter('point')" class="pixel-btn bg-stone-800 text-stone-300 px-2 py-1 rounded">POINTS</button>
+            <button onclick="setInvCategoryFilter('blade')" class="pixel-btn bg-stone-800 text-stone-300 px-2 py-1 rounded">BLADES</button>
+            <button onclick="setInvCategoryFilter('axe')" class="pixel-btn bg-stone-800 text-stone-300 px-2 py-1 rounded">AXES/CELTS</button>
+            <button onclick="setInvCategoryFilter('slate')" class="pixel-btn bg-stone-800 text-stone-300 px-2 py-1 rounded">SLATE & WEIGHTS</button>
+            <button onclick="setInvCategoryFilter('coa')" class="pixel-btn bg-cyan-950 text-cyan-300 border border-cyan-700 px-2 py-1 rounded">COA CERTIFIED</button>
+          </div>
+
+          <!-- Inventory Grid -->
+          <div id="inventory-grid" class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-[460px] overflow-y-auto p-1 bg-[#07090f] border border-stone-800 rounded">
+            <!-- Dynamic Item Cards -->
+          </div>
+        </div>
+
+        <!-- Detailed Inspector Column -->
+        <div class="md:col-span-5 pixel-box p-3 flex flex-col justify-between space-y-3">
+          <div>
+            <div class="flex justify-between items-start border-b border-stone-800 pb-2">
+              <div>
+                <h3 id="inspect-name" class="font-pixel text-xs text-amber-400 truncate max-w-[210px]">SELECT A SPECIMEN</h3>
+                <span id="inspect-era-text" class="text-[10px] text-stone-400 font-mono">Cultural Period: ---</span>
+              </div>
+              <div id="inspect-grade-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-stone-800 text-stone-400 font-mono">
+                GRADE --
+              </div>
+            </div>
+
+            <!-- Pixel Render Showcase Canvas -->
+            <div class="w-full h-44 rounded border-2 border-stone-700 bg-gradient-to-b from-[#141824] to-[#07090f] my-2 flex items-center justify-center relative shadow-inner">
+              <canvas id="canvas-inspect-large" width="128" height="128" class="w-36 h-36 drop-shadow-lg"></canvas>
+              <div id="inspect-coa-stamp" class="hidden absolute top-2 right-2 bg-cyan-950/90 border border-cyan-400 text-cyan-300 text-[8px] font-mono px-1.5 py-0.5 rounded rotate-3">
+                ★ MLGS CERTIFIED
+              </div>
+            </div>
+
+            <!-- Diagnostics Spec Sheet -->
+            <div class="space-y-1 font-term text-sm bg-[#06080d] p-2.5 rounded border border-stone-800 leading-tight">
+              <div class="flex justify-between"><span class="text-stone-400">Typology:</span><span id="inspect-typology" class="text-amber-300">--</span></div>
+              <div class="flex justify-between"><span class="text-stone-400">Mineral & Quarry:</span><span id="inspect-mineral" class="text-cyan-300">--</span></div>
+              <div class="flex justify-between"><span class="text-stone-400">Dimensions:</span><span id="inspect-dimensions" class="text-stone-300">--</span></div>
+              <div class="flex justify-between"><span class="text-stone-400">Flaking & Basal Style:</span><span id="inspect-knapping-style" class="text-stone-200">--</span></div>
+              <div class="flex justify-between"><span class="text-stone-400">Cortex / Patina Wear:</span><span id="inspect-cortex" class="text-yellow-300">--</span></div>
+              <div class="flex justify-between border-t border-stone-800 pt-1">
+                <span class="text-stone-400">Catalog Fair Value:</span>
+                <span id="inspect-fair-value" class="text-emerald-400 font-bold font-mono">$0</span>
+              </div>
+            </div>
+
+            <p id="inspect-historical-lore" class="text-[11px] text-stone-300 italic mt-2 bg-[#0d111a] p-2 rounded border border-stone-800 leading-tight">
+              Tap any recovered artifact from the grid to examine knapping pressure flake scars, mineral banding, and cultural history.
+            </p>
+          </div>
+
+          <!-- Bottom Actions -->
+          <div class="grid grid-cols-3 gap-1.5 pt-2 border-t border-stone-800">
+            <button onclick="sendSelectedToGrading()" class="pixel-btn bg-cyan-900 hover:bg-cyan-800 text-cyan-200 text-[9px] py-2 rounded">
+              🔍 MLGS Auth ($45)
+            </button>
+            <button onclick="mountSelectedToShadowbox()" class="pixel-btn bg-stone-800 hover:bg-stone-700 text-amber-300 text-[9px] py-2 rounded">
+              🖼️ Mount Frame
+            </button>
+            <button onclick="listSelectedInLiveAuction()" class="pixel-btn bg-emerald-900 hover:bg-emerald-800 text-emerald-200 text-[9px] py-2 rounded">
+              🏷️ Auction Lot
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. OFFICIAL MLGS AUTHENTICATION & GRADING LAB -->
+    <section id="tab-grading" class="hidden space-y-3">
+      <div class="pixel-box p-3 sm:p-4">
+        <div class="flex flex-wrap justify-between items-center pb-2 border-b border-stone-800 gap-2">
+          <div>
+            <div class="font-pixel text-xs sm:text-sm text-cyan-300 flex items-center gap-2">
+              <span>🔬</span> MIDWEST LITHIC GRADING SERVICE (MLGS)
+            </div>
+            <p class="text-[10px] text-stone-400">Official authentication, microscopic edge evaluation & serialized COA registry.</p>
+          </div>
+          <div class="bg-cyan-950 border border-cyan-600 text-cyan-300 font-mono text-xs px-2.5 py-1 rounded">
+            FEE: $45 / SPECIMEN
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mt-3">
+          <!-- Selection & Submission Form -->
+          <div class="md:col-span-5 space-y-3">
+            <div class="pixel-inset p-3 rounded space-y-2">
+              <label class="text-[10px] text-stone-400 block font-mono">SELECT UNGRADED ARTIFACT FROM BAG:</label>
+              <select id="select-grading-candidate" onchange="onGradingCandidateSelected()" class="w-full bg-[#05070a] text-amber-300 border border-stone-700 p-2 rounded text-xs">
+                <option value="">-- Choose specimen to authenticate --</option>
+              </select>
+
+              <div id="grading-candidate-preview" class="hidden pt-2 flex items-center gap-3">
+                <canvas id="canvas-grading-thumb" width="56" height="56" class="w-14 h-14 bg-black border border-stone-700 rounded"></canvas>
+                <div class="text-xs">
+                  <div id="grading-candidate-title" class="font-bold text-amber-300">--</div>
+                  <div id="grading-candidate-meta" class="text-[10px] text-stone-400">--</div>
+                  <div class="text-[10px] text-emerald-400 font-mono">Current Base: <span id="grading-candidate-val">$0</span></div>
+                </div>
+              </div>
+            </div>
+
+            <button onclick="executeAuthenticationProcess()" id="btn-submit-grading" class="w-full pixel-btn bg-cyan-700 hover:bg-cyan-600 text-white font-bold text-xs py-3 rounded">
+              📜 Authenticate, Grade & Issue COA ($45)
+            </button>
+
+            <div class="text-[10px] text-stone-400 bg-[#0a0d14] p-2.5 rounded border border-stone-800 space-y-1">
+              <div class="text-cyan-300 font-bold">Why Authenticate with MLGS?</div>
+              <div>• Verifies authentic prehistoric patina vs modern knapper reproductions.</div>
+              <div>• Boosts fair trade show valuation by <strong>+40% to +120%</strong>.</div>
+              <div>• Unlocks intense buyer interest in live online auctions.</div>
+            </div>
+          </div>
+
+          <!-- Official Stamped Certificate of Authenticity (COA) Preview -->
+          <div class="md:col-span-7">
+            <div id="coa-document" class="p-4 rounded border-4 border-amber-600/80 bg-[#14120c] relative shadow-2xl space-y-3 min-h-[310px]">
+              <div class="border-b-2 border-amber-600/50 pb-2 flex justify-between items-start">
+                <div>
+                  <div class="font-pixel text-[10px] text-amber-300 tracking-wider">MIDWEST LITHIC REGISTRY</div>
+                  <div class="text-[8px] font-mono text-stone-400">CERTIFICATE OF PREHISTORIC AUTHENTICITY</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-[9px] font-mono text-cyan-300">REG: <span id="coa-reg-num">#MLGS-PENDING</span></div>
+                  <div class="text-[8px] font-mono text-stone-500">COLUMBUS, OHIO LAB</div>
+                </div>
+              </div>
+
+              <!-- Main Diagnostic Sheet in Certificate -->
+              <div class="grid grid-cols-3 gap-2 text-xs font-term pt-1">
+                <div class="col-span-1 flex flex-col items-center justify-center p-2 bg-black/50 border border-stone-800 rounded">
+                  <canvas id="canvas-coa-view" width="96" height="96" class="w-24 h-24"></canvas>
+                  <div id="coa-grade-stamp" class="mt-2 text-center text-xs font-pixel text-emerald-400 bg-emerald-950/80 border border-emerald-500 px-2 py-0.5 rounded">
+                    GRADE --
+                  </div>
+                </div>
+
+                <div class="col-span-2 space-y-1 bg-black/40 p-2.5 rounded border border-stone-800 text-sm">
+                  <div><span class="text-stone-400">Typology:</span> <span id="coa-typology" class="text-amber-300">Awaiting Submission</span></div>
+                  <div><span class="text-stone-400">Mineral Variety:</span> <span id="coa-mineral" class="text-cyan-300">---</span></div>
+                  <div><span class="text-stone-400">Microscopic Wear:</span> <span id="coa-wear" class="text-stone-300">---</span></div>
+                  <div><span class="text-stone-400">Basal Grinding:</span> <span id="coa-grinding" class="text-stone-300">---</span></div>
+                  <div><span class="text-stone-400">Patination Index:</span> <span id="coa-patina" class="text-stone-300">---</span></div>
+                  <div class="border-t border-stone-800 pt-1 text-emerald-400 font-bold">
+                    <span>Certified Value:</span> <span id="coa-valuation">$0</span>
+                  </div>
+                </div>
+              </div>
+
+              <div id="coa-inspector-verdict" class="text-[10px] text-stone-400 italic bg-[#0b0a07] p-2 rounded border border-amber-900/40">
+                "Select a recovered piece from your field bag and submit it for lab analysis to verify authenticity, assign an official G-Grade, and generate this stamped seal."
+              </div>
+
+              <!-- Wax Seal Graphic Element -->
+              <div class="absolute bottom-2 right-3 w-12 h-12 rounded-full border-2 border-amber-500 bg-amber-950/90 flex items-center justify-center text-xl shadow-lg opacity-80 pointer-events-none">
+                🦅
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. BUILT-IN LITHIC FIELD GUIDE & TYPOLOGY ENCYCLOPEDIA -->
+    <section id="tab-guide" class="hidden space-y-3">
+      <div class="pixel-box p-3">
+        <div class="flex flex-wrap justify-between items-center pb-2 border-b border-stone-800 gap-2">
+          <div>
+            <h2 class="font-pixel text-xs text-amber-300">MIDWESTERN LITHIC FIELD GUIDE</h2>
+            <p class="text-[10px] text-stone-400">Comprehensive catalog of North American projectile points, ceremonial blades, and ground stone tools.</p>
+          </div>
+          <input type="text" id="guide-search-input" oninput="filterFieldGuide()" placeholder="Search typologies..." class="bg-[#07090e] border border-stone-700 text-xs px-2.5 py-1 rounded text-cyan-300 focus:outline-none">
+        </div>
+
+        <!-- Catalog List Container -->
+        <div id="guide-catalog-list" class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[520px] overflow-y-auto p-1">
+          <!-- Guide Entry Cards Injected Dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. VELVET SHADOWBOX CABINET -->
+    <section id="tab-shadowbox" class="hidden space-y-3">
+      <div class="pixel-box p-3">
+        <div class="flex flex-wrap justify-between items-center pb-2 border-b border-stone-800 gap-2">
+          <div>
+            <h2 class="font-pixel text-xs text-amber-300">VELVET SHADOWBOX CABINET</h2>
+            <p class="text-[10px] text-stone-400">Display frame for your personal collection of authenticated museum-grade pieces.</p>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+            <span class="text-stone-400">Velvet Mat:</span>
+            <select id="select-mat-color" onchange="updateShadowboxMatColor()" class="bg-[#07090e] text-xs text-amber-300 border border-stone-700 px-2 py-1 rounded">
+              <option value="crimson">Crimson Burgundy Velvet</option>
+              <option value="navy">Midnight Navy Velvet</option>
+              <option value="emerald">Deep Forest Emerald</option>
+              <option value="black">Obsidian Charcoal Velvet</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 8-Slot Shadowbox Frame -->
+        <div id="shadowbox-frame" class="mt-3 p-4 sm:p-6 rounded-lg grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 border-4 border-[#2d2218] shadow-2xl transition-all" style="background: radial-gradient(circle at center, #2e080b 0%, #150204 100%);">
+          <!-- 8 Slots generated in JS -->
+          <div id="shadow-slot-0" class="shadow-slot"></div>
+          <div id="shadow-slot-1" class="shadow-slot"></div>
+          <div id="shadow-slot-2" class="shadow-slot"></div>
+          <div id="shadow-slot-3" class="shadow-slot"></div>
+          <div id="shadow-slot-4" class="shadow-slot"></div>
+          <div id="shadow-slot-5" class="shadow-slot"></div>
+          <div id="shadow-slot-6" class="shadow-slot"></div>
+          <div id="shadow-slot-7" class="shadow-slot"></div>
+        </div>
+
+        <div class="mt-3 flex justify-between items-center text-xs font-mono text-stone-400 px-1">
+          <span>CURATED CABINET VALUATION: <span id="shadowbox-total-value" class="text-emerald-400 font-bold">$0</span></span>
+          <button onclick="unmountAllShadowboxRelics()" class="pixel-btn bg-stone-800 text-stone-300 px-3 py-1 text-[10px] rounded">
+            Unmount All To Bag
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. TRADE SHOW FLOOR & TIMED LIVE AUCTIONS -->
+    <section id="tab-market" class="hidden space-y-3">
+      <!-- Sub-Tab Toggle -->
+      <div class="flex gap-2 border-b border-stone-800 pb-2 text-xs">
+        <button onclick="switchMarketView('tradeshow')" id="subnav-tradeshow" class="pixel-btn bg-amber-600 text-black font-bold px-3 py-1.5 rounded">
+          🎪 Trade Show Aisles
+        </button>
+        <button onclick="switchMarketView('auctions')" id="subnav-auctions" class="pixel-btn bg-stone-800 text-stone-300 px-3 py-1.5 rounded">
+          🏷️ Live Auction House (<span id="market-active-lot-count">0</span>)
+        </button>
+      </div>
+
+      <!-- VIEW A: TRADE SHOW AISLE -->
+      <div id="view-tradeshow" class="grid grid-cols-1 md:grid-cols-12 gap-3">
+        <!-- Dealers List -->
+        <div class="md:col-span-5 pixel-box p-3">
+          <div class="flex justify-between items-center pb-2 border-b border-stone-800 mb-2">
+            <div>
+              <div class="font-pixel text-[10px] text-amber-300">MIDWEST RELIC EXPO</div>
+              <span class="text-[9px] text-stone-400">Booth Walkways & Enthusiasts</span>
+            </div>
+            <button onclick="shuffleMarketDealers()" class="pixel-btn bg-stone-800 text-[9px] text-amber-300 px-2 py-1 rounded">
+              Next Booths ↻
+            </button>
+          </div>
+
+          <div id="dealer-card-list" class="space-y-2 max-h-[380px] overflow-y-auto">
+            <!-- Dealer Buttons -->
+          </div>
+        </div>
+
+        <!-- Negotiation Table -->
+        <div class="md:col-span-7 pixel-box p-3 flex flex-col justify-between space-y-2">
+          <div>
+            <div class="flex items-center gap-3 bg-[#080b10] p-2.5 rounded border border-stone-800">
+              <div id="active-dealer-avatar" class="w-12 h-12 bg-stone-800 border border-stone-600 rounded flex items-center justify-center text-2xl">
+                🤠
+              </div>
+              <div>
+                <div id="active-dealer-name" class="font-bold text-amber-300 text-xs">"Flint Ridge Frank"</div>
+                <div id="active-dealer-focus" class="text-[10px] text-stone-400">Seeking: Paleo Clovis & Dovetails</div>
+                <div id="active-dealer-patience" class="text-[10px] text-yellow-400 font-mono">Patience: ★★★★☆</div>
+              </div>
+            </div>
+
+            <!-- Speech Quote -->
+            <div class="mt-2.5 bg-[#0a0e17] p-2.5 rounded border border-stone-800 font-term text-base text-stone-200 leading-tight">
+              <div class="text-[8px] font-pixel text-amber-400 mb-1">DEALER CHAT</div>
+              <p id="dealer-dialogue-quote">"Always buying good Midwestern flint! Got any documented Ohio river points or certified blades?"</p>
+            </div>
+
+            <!-- Relic Selector -->
+            <div class="mt-2.5 space-y-2">
+              <label class="text-[10px] text-stone-400 block font-mono">OFFER SPECIMEN FROM BAG:</label>
+              <select id="select-trade-relic" onchange="onTradeOfferRelicChange()" class="w-full bg-[#06080d] text-amber-200 border border-stone-700 p-2 rounded text-xs">
+                <option value="">-- Choose specimen to haggle --</option>
+              </select>
+
+              <div id="trade-calculation-box" class="hidden bg-[#07090e] p-2.5 rounded border border-stone-800 flex justify-between items-center text-xs font-mono">
+                <span class="text-stone-400">Fair Value: <span id="trade-fair-val" class="text-white">$0</span></span>
+                <span class="text-stone-400">Cash Offer: <span id="trade-cash-offer" class="text-emerald-400 font-bold text-sm">$0</span></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Negotiation Buttons -->
+          <div class="pt-2 border-t border-stone-800 space-y-2">
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="haggleTrade('counter')" class="pixel-btn bg-stone-800 hover:bg-stone-700 text-amber-300 text-[10px] py-2 rounded">
+                🤝 Counter (+15%)
+              </button>
+              <button onclick="haggleTrade('provenance')" class="pixel-btn bg-stone-800 hover:bg-stone-700 text-cyan-300 text-[10px] py-2 rounded">
+                📜 Pitch Provenance / COA
+              </button>
+            </div>
+            <button onclick="finalizeDealerSale()" id="btn-sell-to-dealer" class="w-full pixel-btn bg-emerald-800 hover:bg-emerald-700 text-white text-xs py-2.5 rounded font-bold">
+              💰 ACCEPT OFFER & TAKE CASH
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW B: TIMED LIVE AUCTION HOUSE -->
+      <div id="view-auctions" class="hidden space-y-3">
+        <div class="pixel-box p-3">
+          <div class="flex justify-between items-center pb-2 border-b border-stone-800">
+            <div>
+              <div class="font-pixel text-xs text-cyan-300">MIDWEST LITHIC LIVE AUCTION BLOCK</div>
+              <p class="text-[10px] text-stone-400">High-grade and authenticated lots sold to historical collectors nationwide.</p>
+            </div>
+          </div>
+
+          <div id="auction-lots-grid" class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            <!-- Active Lots Generated -->
+          </div>
+
+          <div id="auction-empty-state" class="text-center py-12 text-stone-500 font-term text-lg">
+            No active lots currently listed. Select an artifact from your <button onclick="switchTab('inventory')" class="text-amber-400 underline">Field Bag</button> and click "Auction Lot".
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. GOD MODE DEVELOPER CONSOLE -->
+    <section id="tab-godmode" class="hidden space-y-3">
+      <div class="pixel-box p-3.5 border-2 border-cyan-400 bg-[#0c111a]">
+        <div class="flex items-center justify-between pb-2 border-b border-cyan-800/60">
+          <div class="font-pixel text-xs text-cyan-300 flex items-center gap-2">
+            <span>⚙️</span> DEVELOPER GOD CONSOLE
+          </div>
+          <span class="text-[9px] bg-cyan-950 text-cyan-300 border border-cyan-700 px-2 py-0.5 rounded font-mono">SANDBOX ACTIVE</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3">
+          <!-- Cache Spawner -->
+          <div class="pixel-inset p-3 rounded space-y-2">
+            <div class="font-bold text-xs text-amber-300">PREHISTORIC CACHE FORCE</div>
+            <p class="text-[10px] text-stone-400">Instantly generate a rare cache containing 4 to 20 artifacts buried in silt.</p>
+            <button onclick="forceCacheExcavationEvent()" class="w-full pixel-btn bg-amber-600 hover:bg-amber-500 text-black font-bold text-xs py-2 rounded">
+              ⚡ Spawn Rare Cache!
+            </button>
+          </div>
+
+          <!-- G10 Museum Mint -->
+          <div class="pixel-inset p-3 rounded space-y-2">
+            <div class="font-bold text-xs text-emerald-300">G10 MUSEUM RELIC MINT</div>
+            <p class="text-[10px] text-stone-400">Directly mint a certified G10 museum specimen into your bag.</p>
+            <button onclick="godMintG10Specimen()" class="w-full pixel-btn bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs py-2 rounded">
+              💎 Mint Flawless G10
+            </button>
+          </div>
+
+          <!-- Economy & Stamina -->
+          <div class="pixel-inset p-3 rounded space-y-2">
+            <div class="font-bold text-xs text-cyan-300">RESOURCES & TAPS</div>
+            <p class="text-[10px] text-stone-400">Add funds and reset unlimited expedition taps.</p>
+            <div class="flex gap-2">
+              <button onclick="godAddFunds(10000)" class="flex-1 pixel-btn bg-stone-800 text-emerald-300 text-[10px] py-1.5 rounded">
+                +$10,000
+              </button>
+              <button onclick="godBoostTaps()" class="flex-1 pixel-btn bg-stone-800 text-cyan-300 text-[10px] py-1.5 rounded">
+                +99 Taps
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom Lithic Fabricator -->
+        <div class="mt-3 pixel-inset p-3 rounded space-y-2">
+          <div class="font-bold text-xs text-stone-200">PROCEDURAL LITHIC FORGE: CUSTOM FABRICATION</div>
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs">
+            <div>
+              <label class="text-[10px] text-stone-400 block">Typology:</label>
+              <select id="god-input-typology" class="w-full bg-[#05070a] text-amber-300 p-1.5 rounded border border-stone-700">
+                <!-- Injected via script -->
+              </select>
+            </div>
+            <div>
+              <label class="text-[10px] text-stone-400 block">Mineral Variety:</label>
+              <select id="god-input-mineral" class="w-full bg-[#05070a] text-cyan-300 p-1.5 rounded border border-stone-700">
+                <!-- Injected via script -->
+              </select>
+            </div>
+            <div>
+              <label class="text-[10px] text-stone-400 block">Assigned Grade:</label>
+              <select id="god-input-grade" class="w-full bg-[#05070a] text-emerald-300 p-1.5 rounded border border-stone-700">
+                <option value="G10">G10 (Museum Pristine)</option>
+                <option value="G9">G9 (Exceptional)</option>
+                <option value="G8">G8 (Very Fine)</option>
+                <option value="G7">G7 (Fine / Intact)</option>
+                <option value="G4">G4 (Field Fragment)</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[10px] text-stone-400 block">MLGS Certification:</label>
+              <select id="god-input-coa" class="w-full bg-[#05070a] text-amber-400 p-1.5 rounded border border-stone-700">
+                <option value="yes">Auto Stamped COA</option>
+                <option value="no">Raw Uncertified</option>
+              </select>
+            </div>
+          </div>
+          <button onclick="godForgeCustomRelic()" class="w-full pixel-btn bg-stone-800 hover:bg-stone-700 text-amber-300 text-xs py-2 rounded font-bold">
+            🔨 Knap Custom Relic Into Bag
+          </button>
+        </div>
+
+        <!-- Backup & Save Controls -->
+        <div class="mt-3 flex flex-wrap gap-2 justify-between items-center text-xs">
+          <div class="text-[10px] text-stone-400 font-mono">AUTOSAVE: LOCALSTORAGE ENABLED</div>
+          <div class="flex gap-2">
+            <button onclick="exportSaveJSON()" class="pixel-btn bg-stone-800 text-stone-300 px-3 py-1.5 rounded text-[10px]">
+              Export Save JSON
+            </button>
+            <button onclick="importSaveJSONPrompt()" class="pixel-btn bg-stone-800 text-stone-300 px-3 py-1.5 rounded text-[10px]">
+              Import Save JSON
+            </button>
+            <button onclick="wipeSaveGame()" class="pixel-btn bg-stone-900 text-stone-500 px-3 py-1.5 rounded text-[10px]">
+              Wipe Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BOTTOM iOS THUMB NAVIGATION DOCK -->
+  <nav class="fixed bottom-0 left-0 right-0 z-50 bg-[#090c12] border-t-2 border-stone-800 px-1 py-1.5 flex justify-around items-center backdrop-blur shadow-2xl">
+    <button onclick="switchTab('hunt')" id="nav-btn-hunt" class="flex flex-col items-center py-1 px-2 rounded text-amber-400 font-bold transition-all">
+      <span class="text-base">⛏️</span>
+      <span class="text-[8px] font-pixel mt-0.5">HUNT</span>
+    </button>
+    <button onclick="switchTab('cache')" id="nav-btn-cache" class="flex flex-col items-center py-1 px-2 rounded text-stone-400 relative transition-all">
+      <span class="text-base">⚡</span>
+      <span class="text-[8px] font-pixel mt-0.5">CACHE</span>
+      <span id="nav-cache-alert-dot" class="hidden absolute top-0 right-1 w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+    </button>
+    <button onclick="switchTab('inventory')" id="nav-btn-inventory" class="flex flex-col items-center py-1 px-2 rounded text-stone-400 transition-all">
+      <span class="text-base">🎒</span>
+      <span class="text-[8px] font-pixel mt-0.5">BAG</span>
+    </button>
+    <button onclick="switchTab('grading')" id="nav-btn-grading" class="flex flex-col items-center py-1 px-2 rounded text-stone-400 transition-all">
+      <span class="text-base">🔬</span>
+      <span class="text-[8px] font-pixel mt-0.5">MLGS</span>
+    </button>
+    <button onclick="switchTab('guide')" id="nav-btn-guide" class="flex flex-col items-center py-1 px-2 rounded text-stone-400 transition-all">
+      <span class="text-base">📖</span>
+      <span class="text-[8px] font-pixel mt-0.5">GUIDE</span>
+    </button>
+    <button onclick="switchTab('shadowbox')" id="nav-btn-shadowbox" class="flex flex-col items-center py-1 px-2 rounded text-stone-400 transition-all">
+      <span class="text-base">🏛️</span>
+      <span class="text-[8px] font-pixel mt-0.5">FRAME</span>
+    </button>
+    <button onclick="switchTab('market')" id="nav-btn-market" class="flex flex-col items-center py-1 px-2 rounded text-stone-400 transition-all">
+      <span class="text-base">🎪</span>
+      <span class="text-[8px] font-pixel mt-0.5">TRADE</span>
+    </button>
+    <button onclick="switchTab('godmode')" id="nav-btn-godmode" class="flex flex-col items-center py-1 px-2 rounded text-cyan-400 transition-all">
+      <span class="text-base">⚙️</span>
+      <span class="text-[8px] font-pixel mt-0.5">GOD</span>
+    </button>
+  </nav>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="game-toast" class="fixed top-14 left-1/2 -translate-x-1/2 z-50 bg-[#131722] border-2 border-amber-500 text-amber-200 text-xs px-4 py-2 rounded shadow-2xl pointer-events-none transition-all duration-300 opacity-0 -translate-y-2">
+    Notice
+  </div>
+
+  <script>
+    /* =========================================================================
+       AUDIO SYNTHESIZER (Pure Web Audio API - 8-Bit Vintage Synthesizer)
+       ========================================================================= */
+    const Sound = {
+      ctx: null,
+      enabled: true,
+
+      init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioCtx();
+        }
+      },
+
+      knapTap() {
+        if (!this.enabled) return;
+        this.init();
+        const t = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(1100 + Math.random() * 300, t);
+        osc.frequency.exponentialRampToValueAtTime(140, t + 0.04);
+
+        gain.gain.setValueAtTime(0.3, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(t);
+        osc.stop(t + 0.04);
+      },
+
+      brushGravel() {
+        if (!this.enabled) return;
+        this.init();
+        const t = this.ctx.currentTime;
+        const bufferSize = this.ctx.sampleRate * 0.06;
+        const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+        const noise = this.ctx.createBufferSource();
+        noise.buffer = buffer;
+
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(1600, t);
+        filter.Q.value = 3.0;
+
+        const gain = this.ctx.createGain();
+        gain.gain.setValueAtTime(0.12, t);
+        gain.gain.exponentialRampToValueAtTime(0.01, t + 0.06);
+
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.ctx.destination);
+        noise.start(t);
+      },
+
+      coinRegister() {
+        if (!this.enabled) return;
+        this.init();
+        const t = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(987.77, t);
+        osc.frequency.setValueAtTime(1318.51, t + 0.06);
+
+        gain.gain.setValueAtTime(0.2, t);
+        gain.gain.exponentialRampToValueAtTime(0.01, t + 0.25);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(t);
+        osc.stop(t + 0.25);
+      },
+
+      stampCert() {
+        if (!this.enabled) return;
+        this.init();
+        const t = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(280, t);
+        osc.frequency.exponentialRampToValueAtTime(60, t + 0.12);
+
+        gain.gain.setValueAtTime(0.4, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(t);
+        osc.stop(t + 0.12);
+      },
+
+      gavelBang() {
+        if (!this.enabled) return;
+        this.init();
+        const t = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, t);
+        osc.frequency.exponentialRampToValueAtTime(50, t + 0.18);
+
+        gain.gain.setValueAtTime(0.35, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(t);
+        osc.stop(t + 0.18);
+      },
+
+      relicFanfare() {
+        if (!this.enabled) return;
+        this.init();
+        const freqs = [523.25, 659.25, 783.99, 1046.50];
+        freqs.forEach((freq, idx) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          const t = this.ctx.currentTime + (idx * 0.07);
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, t);
+          gain.gain.setValueAtTime(0.2, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(t);
+          osc.stop(t + 0.17);
+        });
+      },
+
+      cacheJingle() {
+        if (!this.enabled) return;
+        this.init();
+        const chords = [
+          [261.63, 329.63, 392.00],
+          [329.63, 392.00, 523.25],
+          [392.00, 523.25, 659.25],
+          [523.25, 659.25, 783.99, 1046.50]
+        ];
+        chords.forEach((chord, i) => {
+          chord.forEach(freq => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            const t = this.ctx.currentTime + (i * 0.13);
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(freq, t);
+            gain.gain.setValueAtTime(0.1, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.32);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(t);
+            osc.stop(t + 0.32);
+          });
+        });
+      }
+    };
+
+    function toggleAudio() {
+      Sound.enabled = !Sound.enabled;
+      document.getElementById('btn-sound').textContent = Sound.enabled ? '🔊' : '🔈';
+      showToast(Sound.enabled ? '8-Bit Audio On' : 'Audio Muted');
+    }
+
+    /* =========================================================================
+       MIDWESTERN MINERALS & REGIONAL QUARRY STONE
+       ========================================================================= */
+    const MIDWEST_MINERALS = [
+      {
+        id: 'flintridge_gem',
+        name: 'Flint Ridge Jewel Chalcedony',
+        origin: 'Licking & Muskingum Co., OH',
+        baseColor: [198, 120, 155],
+        edgeColor: [225, 160, 190],
+        flakeColor: [248, 215, 230],
+        banding: true,
+        bandColor: [245, 195, 80],
+        sheen: 0.7,
+        stipple: false,
+        multiplier: 2.6,
+        desc: 'Vitreous rainbow chalcedony with pastel lavender, butterscotch, and rose quartz streaks.'
+      },
+      {
+        id: 'uppermercer',
+        name: 'Upper Mercer / Coshocton Black Flint',
+        origin: 'Coshocton & Perry Co., OH',
+        baseColor: [25, 29, 38],
+        edgeColor: [50, 58, 74],
+        flakeColor: [78, 88, 110],
+        banding: false,
+        bandColor: null,
+        sheen: 0.5,
+        stipple: false,
+        multiplier: 1.9,
+        desc: 'Lustrous blue-black cryptocrystalline flint famous for surgical concoidal fractures.'
+      },
+      {
+        id: 'wyandotte',
+        name: 'Wyandotte Chert (Indiana Hornstone)',
+        origin: 'Harrison & Crawford Co., IN',
+        baseColor: [68, 72, 80],
+        edgeColor: [95, 100, 110],
+        flakeColor: [130, 135, 145],
+        banding: true,
+        bandColor: [175, 165, 145],
+        sheen: 0.4,
+        stipple: false,
+        multiplier: 2.1,
+        desc: 'Nodular hornstone showing circular bullseye concentric rings with chalky limestone cortex.'
+      },
+      {
+        id: 'burlington',
+        name: 'Burlington White Chert',
+        origin: 'Illinois Basin & Mississippi Terraces',
+        baseColor: [215, 212, 204],
+        edgeColor: [235, 232, 226],
+        flakeColor: [250, 248, 245],
+        sheen: 0.25,
+        banding: false,
+        bandColor: null,
+        stipple: false,
+        multiplier: 1.6,
+        desc: 'Creamy milk-white Mississippian chert, often heat-treated to an attractive pinkish blush.'
+      },
+      {
+        id: 'zaleski',
+        name: 'Zaleski Jet Flint',
+        origin: 'Vinton Co., OH',
+        baseColor: [15, 15, 18],
+        edgeColor: [40, 40, 46],
+        flakeColor: [68, 68, 76],
+        banding: true,
+        bandColor: [190, 145, 55],
+        sheen: 0.8,
+        stipple: false,
+        multiplier: 2.3,
+        desc: 'Pitch-black glassy flint frequently preserving an attractive warm amber outer rind.'
+      },
+      {
+        id: 'huron_slate',
+        name: 'Banded Huronian Slate',
+        origin: 'Midwest Glacial Till Drift',
+        baseColor: [52, 65, 62],
+        edgeColor: [80, 95, 90],
+        flakeColor: [110, 130, 122],
+        banding: true,
+        bandColor: [26, 35, 32],
+        sheen: 0.2,
+        stipple: true,
+        multiplier: 2.7,
+        desc: 'Varved glacial sediment ground and polished into symmetrical ceremonial weights.'
+      },
+      {
+        id: 'greenstone',
+        name: 'Midwest Glacial Diorite / Greenstone',
+        origin: 'Heartland River Boulders',
+        baseColor: [50, 58, 54],
+        edgeColor: [75, 84, 78],
+        flakeColor: [105, 115, 108],
+        banding: false,
+        bandColor: null,
+        sheen: 0.15,
+        stipple: true,
+        multiplier: 1.7,
+        desc: 'Dense metamorphic boulder pecked with quartzite hammers and polished on sandstone bit facets.'
+      },
+      {
+        id: 'novaculite',
+        name: 'Arkansas Novaculite',
+        origin: 'Ouachita / Ozark Escarpment',
+        baseColor: [180, 175, 160],
+        edgeColor: [205, 200, 185],
+        flakeColor: [230, 225, 215],
+        banding: false,
+        bandColor: null,
+        sheen: 0.55,
+        stipple: false,
+        multiplier: 2.0,
+        desc: 'Translucent microcrystalline silica quarried from deep Ozark mountain exposures.'
+      }
+    ];
+
+    /* =========================================================================
+       EXPANDED TYPOLOGIES & DIAGNOSTICS (Paleo, Archaic, Woodland, Mississippian)
+       ========================================================================= */
+    const MIDWEST_TYPOLOGIES = [
+      // Paleo-Indian
+      {
+        id: 'type_clovis',
+        name: 'Ohio Clovis Fluted Point',
+        category: 'point',
+        shape: 'clovis',
+        era: 'Paleo-Indian (13,000 - 10,000 BCE)',
+        baseLen: 3.8,
+        baseVal: 620,
+        distribution: 'Ohio River Valley, Licking & Pickaway Terraces',
+        diagnostics: 'Deep central fluting channels on both faces, concave base, heavy basal grinding.',
+        allowedMats: ['uppermercer', 'flintridge_gem', 'zaleski', 'wyandotte'],
+        desc: 'Masterwork spearpoint engineered for Ice Age megafauna hunting.'
+      },
+      {
+        id: 'type_folsom',
+        name: 'Heartland Folsom Lanceolate',
+        category: 'point',
+        shape: 'folsom',
+        era: 'Paleo-Indian (11,000 - 9,500 BCE)',
+        baseLen: 2.6,
+        baseVal: 580,
+        distribution: 'Midwestern Prairie Margins & River Terraces',
+        diagnostics: 'Ultra-thin cross section, extensive fluting extending nearly to the tip.',
+        allowedMats: ['burlington', 'uppermercer', 'novaculite'],
+        desc: 'Delicately executed fluted projectile reflecting unmatched bifacial control.'
+      },
+      {
+        id: 'type_dalton',
+        name: 'Dalton Serrated Knife-Point',
+        category: 'point',
+        shape: 'dalton',
+        era: 'Late Paleo / Early Archaic (10,000 - 8,500 BCE)',
+        baseLen: 3.2,
+        baseVal: 380,
+        distribution: 'Midwest & Ozark Escarpment Shelters',
+        diagnostics: 'Steeply beveled blade margins, crisp serrations, auriculate concave ears.',
+        allowedMats: ['burlington', 'novaculite', 'uppermercer'],
+        desc: 'Versatile hunting point and resharpenable butcher knife.'
+      },
+
+      // Archaic
+      {
+        id: 'type_thebes',
+        name: 'Thebes E-Notch Biface',
+        category: 'point',
+        shape: 'thebes',
+        era: 'Early Archaic (8,000 - 6,000 BCE)',
+        baseLen: 3.5,
+        baseVal: 360,
+        distribution: 'Ohio, Indiana & Illinois Till Plains',
+        diagnostics: 'Square diagonal E-shaped hafting notches, beveled edge resharpening.',
+        allowedMats: ['flintridge_gem', 'wyandotte', 'uppermercer'],
+        desc: 'Classic Early Archaic blade designed with specialized deep hafting cuts.'
+      },
+      {
+        id: 'type_dovetail',
+        name: 'St. Charles Dovetail Blade',
+        category: 'point',
+        shape: 'dovetail',
+        era: 'Early Archaic (8,000 - 5,500 BCE)',
+        baseLen: 4.4,
+        baseVal: 490,
+        distribution: 'Flint Ridge Trails & Ohio / Wabash Valleys',
+        diagnostics: 'Convex blade edges, fan-shaped rounded dovetail base, ground stem notch.',
+        allowedMats: ['flintridge_gem', 'uppermercer', 'zaleski', 'wyandotte'],
+        desc: 'Regarded by collectors as the quintessential Midwest showpiece.'
+      },
+      {
+        id: 'type_hardstone_axe',
+        name: '3/4 Grooved Ohio Hardstone Axe',
+        category: 'axe',
+        shape: 'grooved_axe',
+        era: 'Archaic Period (6,000 - 2,500 BCE)',
+        baseLen: 6.2,
+        baseVal: 440,
+        distribution: 'Ohio Valley, Scioto & Miami River Basins',
+        diagnostics: 'Pecked diorite/greenstone body, deep 3/4 groove for rawhide wrap.',
+        allowedMats: ['greenstone'],
+        desc: 'Heavy felling tool with polished bit for prehistoric woodland forestry.'
+      },
+      {
+        id: 'type_bannerstone',
+        name: 'Banded Slate Winged Bannerstone',
+        category: 'slate',
+        shape: 'bannerstone',
+        era: 'Middle Archaic (5,000 - 3,000 BCE)',
+        baseLen: 4.6,
+        baseVal: 680,
+        distribution: 'Midwest Glacial Belt & Ohio River Drainages',
+        diagnostics: 'Symmetrical winged butterfly contours, cylindrical drilled center bore.',
+        allowedMats: ['huron_slate'],
+        desc: 'Spear-thrower (atlatl) counterweight carved from banded Huronian slate.'
+      },
+
+      // Woodland (Adena & Hopewell)
+      {
+        id: 'type_adena_blade',
+        name: 'Adena Robbins Cache Blade',
+        category: 'blade',
+        shape: 'adena_blade',
+        era: 'Early Woodland (1,000 - 200 BCE)',
+        baseLen: 4.8,
+        baseVal: 340,
+        distribution: 'Licking, Scioto & Ross Co. Mounds & Terraces',
+        diagnostics: 'Broad ovate leaf silhouette, squared contracting stem, bifacial percussion.',
+        allowedMats: ['flintridge_gem', 'uppermercer', 'wyandotte'],
+        desc: 'Ceremonial Adena knife frequently interred in sacred mound caches.'
+      },
+      {
+        id: 'type_hopewell_snyders',
+        name: 'Hopewell Snyders Corner-Notch',
+        category: 'point',
+        shape: 'hopewell',
+        era: 'Middle Woodland (200 BCE - 400 CE)',
+        baseLen: 3.4,
+        baseVal: 410,
+        distribution: 'Ohio Hopewell Earthworks & Illinois River Valleys',
+        diagnostics: 'Wide ovate outline, large expanding corner notches, convex base.',
+        allowedMats: ['flintridge_gem', 'burlington', 'wyandotte'],
+        desc: 'Iconic Hopewell showpiece crafted by master artisans from jewel stone.'
+      },
+      {
+        id: 'type_birdstone',
+        name: 'Glacial Kame Birdstone',
+        category: 'slate',
+        shape: 'birdstone',
+        era: 'Late Archaic / Early Woodland (1,500 - 500 BCE)',
+        baseLen: 4.2,
+        baseVal: 820,
+        distribution: 'Glacial Kame Gravel Knolls, Northern Ohio & Indiana',
+        diagnostics: 'Stylized avian body, drilled biconical suspension holes front and rear.',
+        allowedMats: ['huron_slate'],
+        desc: 'Pinnacle of prehistoric lapidary art; prized ceremonial atlatl ornament.'
+      },
+
+      // Mississippian & Fort Ancient
+      {
+        id: 'type_fort_ancient',
+        name: 'Fort Ancient Triangular Point',
+        category: 'point',
+        shape: 'triangular',
+        era: 'Late Prehistoric (1,000 - 1650 CE)',
+        baseLen: 1.4,
+        baseVal: 110,
+        distribution: 'Scioto Valley Village Sites & Fort Ancient Bluffs',
+        diagnostics: 'True arrowpoint; isosceles triangle with delicate micro-pressure retouch.',
+        allowedMats: ['burlington', 'uppermercer', 'novaculite'],
+        desc: 'Razor-sharp true arrowhead utilized with the bow and arrow.'
+      },
+      {
+        id: 'type_cahokia_tri',
+        name: 'Cahokia Gem Tri-Point',
+        category: 'point',
+        shape: 'cahokia_tri',
+        era: 'Mississippian (1,050 - 1350 CE)',
+        baseLen: 1.6,
+        baseVal: 240,
+        distribution: 'Cahokia Mounds Precinct & American Bottoms',
+        diagnostics: 'Side-notched triangular blade with basal notch, exquisite micro-flaking.',
+        allowedMats: ['burlington', 'flintridge_gem', 'novaculite'],
+        desc: 'Ritual arrowpoint deposited in Mound 72 elite warrior burials.'
+      }
+    ];
+
+    const MLGS_GRADES = [
+      { grade: 'G10', label: 'Museum Pristine', mult: 2.8, wear: 'None / Flawless', desc: 'Museum grade. Razor needle tip, intact ear margins, zero field contact.' },
+      { grade: 'G9', label: 'Exceptional', mult: 2.0, wear: 'Microscopic Use Polish', desc: 'Exceptional find. Tiny ancient edge wear; needle tip intact.' },
+      { grade: 'G8', label: 'Very Fine', mult: 1.4, wear: 'Light Ancient Soil Patina', desc: 'Very fine relic. Authentic minor hinge fracture on one blade face.' },
+      { grade: 'G7', label: 'Fine / Intact', mult: 1.0, wear: 'Field Scuff / Minor Ear Nick', desc: 'Honest field recovery. Slight tip ding or prehistoric resharpening.' },
+      { grade: 'G4', label: 'Field Fragment', mult: 0.35, wear: 'Plow Strike / Basal Snap', desc: 'Plow-struck fragment. Authentic ancient material with broken haft.' }
+    ];
+
+    /* =========================================================================
+       PROCEDURAL PIXEL LITHIC GENERATOR ENGINE
+       ========================================================================= */
+    let globalRelicSerial = 1001;
+
+    function generateProceduralArtifact(forcedType = null, forcedMat = null, forcedGrade = null, forcedCOA = false) {
+      const typeDef = forcedType || MIDWEST_TYPOLOGIES[Math.floor(Math.random() * MIDWEST_TYPOLOGIES.length)];
+
+      let material;
+      if (forcedMat) {
+        material = forcedMat;
+      } else {
+        const matches = MIDWEST_MINERALS.filter(m => typeDef.allowedMats.includes(m.id));
+        material = matches.length > 0 ? matches[Math.floor(Math.random() * matches.length)] : MIDWEST_MINERALS[0];
+      }
+
+      let gradeDef;
+      if (forcedGrade) {
+        gradeDef = MLGS_GRADES.find(g => g.grade === forcedGrade) || MLGS_GRADES[0];
+      } else {
+        const roll = Math.random();
+        if (roll > 0.94) gradeDef = MLGS_GRADES[0]; // G10
+        else if (roll > 0.80) gradeDef = MLGS_GRADES[1]; // G9
+        else if (roll > 0.50) gradeDef = MLGS_GRADES[2]; // G8
+        else if (roll > 0.20) gradeDef = MLGS_GRADES[3]; // G7
+        else gradeDef = MLGS_GRADES[4]; // G4
+      }
+
+      const seed = Math.floor(Math.random() * 9999999);
+      const lenInches = (typeDef.baseLen * (0.88 + Math.random() * 0.24)).toFixed(2);
+      const widthInches = (lenInches * 0.46).toFixed(2);
+      const thickInches = (lenInches * 0.14).toFixed(2);
+
+      let fairValue = Math.round(
+        typeDef.baseVal * material.multiplier * gradeDef.mult * (lenInches / typeDef.baseLen)
+      );
+
+      const relic = {
+        id: 'LITH-' + (globalRelicSerial++),
+        title: typeDef.name,
+        category: typeDef.category,
+        shape: typeDef.shape,
+        material: material,
+        era: typeDef.era,
+        grade: gradeDef.grade,
+        gradeLabel: gradeDef.label,
+        gradeDesc: gradeDef.desc,
+        wear: gradeDef.wear,
+        length: lenInches,
+        width: widthInches,
+        thick: thickInches,
+        value: fairValue,
+        seed: seed,
+        diagnostics: typeDef.diagnostics,
+        desc: typeDef.desc,
+        coa: null
+      };
+
+      if (forcedCOA) {
+        certifyRelic(relic);
+      }
+
+      return relic;
+    }
+
+    function certifyRelic(relic) {
+      if (relic.coa) return;
+      const coaID = 'MLGS-' + Math.floor(100000 + Math.random() * 900000);
+      const patinaScore = (90 + Math.random() * 9.9).toFixed(1);
+
+      relic.coa = {
+        certNumber: coaID,
+        date: 'Oct 2026',
+        patinaIndex: `${patinaScore}% (Authentic Prehistoric Quartz Bloom)`,
+        microWear: relic.wear,
+        grinding: 'Heavy Basal Smoothing Confirmed',
+        seal: 'VERIFIED AUTHENTIC PREHISTORIC'
+      };
+
+      // Authentication market premium
+      relic.value = Math.round(relic.value * 1.55);
+    }
+
+    /* Pixel Lithic Drawing onto Canvas */
+    function renderPixelLithic(canvas, relic) {
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      let currentSeed = relic.seed;
+      function rnd() {
+        currentSeed = (currentSeed * 9301 + 49297) % 233280;
+        return currentSeed / 233280;
+      }
+
+      const mat = relic.material;
+      const shape = relic.shape;
+      const gridW = 32;
+      const gridH = 32;
+      const cellPx = w / gridW;
+      const centerX = gridW / 2;
+
+      // Grid: 0:empty, 1:core, 2:flake-ridge, 3:flute, 4:mineral-band, 5:stipple, 6:glass-sheen
+      const grid = Array(gridH).fill(0).map(() => Array(gridW).fill(0));
+
+      for (let y = 0; y < gridH; y++) {
+        const ny = (y - 3) / (gridH - 6);
+        for (let x = 0; x < gridW; x++) {
+          const nx = (x - centerX) / (gridW / 2);
+          let inside = false;
+          let halfW = 0;
+
+          if (shape === 'clovis') {
+            if (ny >= 0.08 && ny <= 0.88) {
+              halfW = ny < 0.5 ? Math.sin((ny / 0.5) * (Math.PI / 2)) * 0.44 : 0.44 - (ny - 0.5) * 0.12;
+              if (ny > 0.82 && Math.abs(nx) < (0.88 - ny) * 3.2) halfW = 0;
+            }
+          } else if (shape === 'folsom') {
+            if (ny >= 0.12 && ny <= 0.86) {
+              halfW = Math.sin((ny - 0.12) / 0.74 * Math.PI) * 0.42;
+              if (ny > 0.80 && Math.abs(nx) < (0.86 - ny) * 2.8) halfW = 0;
+            }
+          } else if (shape === 'dalton') {
+            if (ny >= 0.1 && ny <= 0.88) {
+              if (ny < 0.65) {
+                halfW = (ny / 0.65) * 0.45;
+                halfW += Math.sin(ny * 35) * 0.035; // serrations
+              } else {
+                halfW = 0.35 + (ny - 0.65) * 0.4; // auriculate ears
+                if (ny > 0.83 && Math.abs(nx) < (0.88 - ny) * 2.5) halfW = 0;
+              }
+            }
+          } else if (shape === 'thebes') {
+            if (ny >= 0.1 && ny <= 0.85) {
+              if (ny < 0.60) {
+                halfW = (ny / 0.6) * 0.52 + Math.sin(ny * 22) * 0.025;
+              } else if (ny >= 0.60 && ny <= 0.72) {
+                halfW = 0.22; // Deep E-notch
+              } else {
+                halfW = 0.48; // Square ears
+              }
+            }
+          } else if (shape === 'dovetail') {
+            if (ny >= 0.08 && ny <= 0.88) {
+              if (ny < 0.68) {
+                halfW = Math.sin((ny / 0.68) * Math.PI) * 0.54;
+              } else if (ny >= 0.68 && ny <= 0.76) {
+                halfW = 0.22; // Notch neck
+              } else {
+                halfW = Math.sin((ny - 0.76) / 0.12 * Math.PI) * 0.38 + 0.16; // Rounded fan base
+              }
+            }
+          } else if (shape === 'adena_blade') {
+            if (ny >= 0.08 && ny <= 0.68) {
+              halfW = Math.sin((ny - 0.08) / 0.6 * Math.PI) * 0.60;
+            } else if (ny > 0.68 && ny <= 0.90) {
+              halfW = 0.25 - (ny - 0.68) * 0.16; // Contracting stem
+            }
+          } else if (shape === 'hopewell') {
+            if (ny >= 0.12 && ny <= 0.86) {
+              if (ny < 0.66) {
+                halfW = Math.sin((ny - 0.12) / 0.54 * Math.PI) * 0.58;
+              } else if (ny >= 0.66 && ny <= 0.76) {
+                halfW = 0.24; // Corner notch
+              } else {
+                halfW = 0.46; // Wide convex base
+              }
+            }
+          } else if (shape === 'triangular') {
+            if (ny >= 0.22 && ny <= 0.82) {
+              halfW = ((ny - 0.22) / 0.6) * 0.38;
+            }
+          } else if (shape === 'cahokia_tri') {
+            if (ny >= 0.18 && ny <= 0.82) {
+              halfW = ((ny - 0.18) / 0.64) * 0.36;
+              if (ny > 0.66 && ny < 0.73) halfW = 0.18; // Side notches
+              if (ny > 0.79 && Math.abs(nx) < 0.1) halfW = 0; // Basal notch
+            }
+          } else if (shape === 'grooved_axe') {
+            if (ny >= 0.12 && ny <= 0.88) {
+              halfW = 0.48;
+              if (ny > 0.36 && ny < 0.50) halfW = 0.38; // 3/4 groove
+              if (ny > 0.74) halfW = (0.88 - ny) * 1.8 + 0.24; // Honed bit
+            }
+          } else if (shape === 'birdstone') {
+            if (ny >= 0.32 && ny <= 0.72) {
+              halfW = 0.16 + Math.sin((ny - 0.32) / 0.40 * Math.PI) * 0.44;
+            }
+          } else if (shape === 'bannerstone') {
+            if (ny >= 0.20 && ny <= 0.80) {
+              const wing = Math.sin((ny - 0.20) / 0.60 * Math.PI);
+              halfW = 0.20 + wing * 0.64;
+              if (Math.abs(nx) < 0.08) halfW = 0.20; // Center drilled barrel
+            }
+          }
+
+          // Damage modifier for G4
+          if (relic.grade === 'G4' && ny < 0.22 && rnd() < 0.5) {
+            halfW = 0;
+          }
+
+          if (Math.abs(nx) <= halfW && halfW > 0.02) {
+            inside = true;
+          }
+
+          if (inside) grid[y][x] = 1;
+        }
+      }
+
+      // Pass 2: Flutes, Banding, Drill Bores, and Stipples
+      for (let y = 1; y < gridH - 1; y++) {
+        const ny = y / gridH;
+        for (let x = 1; x < gridW - 1; x++) {
+          if (grid[y][x] === 0) continue;
+
+          const isEdge = (
+            grid[y-1][x] === 0 || grid[y+1][x] === 0 ||
+            grid[y][x-1] === 0 || grid[y][x+1] === 0
+          );
+
+          if (isEdge) {
+            grid[y][x] = 2; // Flake edge
+            continue;
+          }
+
+          const nx = (x - centerX) / (gridW / 2);
+
+          // Central Fluting Channel (Clovis & Folsom)
+          if ((shape === 'clovis' && Math.abs(nx) < 0.11 && ny > 0.40 && ny < 0.84) ||
+              (shape === 'folsom' && Math.abs(nx) < 0.13 && ny > 0.25 && ny < 0.82)) {
+            grid[y][x] = 3;
+            continue;
+          }
+
+          // Center Biconical Drilled Hole on Bannerstones
+          if (shape === 'bannerstone' && Math.abs(nx) < 0.06 && ny > 0.45 && ny < 0.55) {
+            grid[y][x] = 0; // Drilled through
+            continue;
+          }
+
+          // Concentric Mineral Banding (Flint Ridge / Wyandotte / Slate)
+          if (mat.banding) {
+            const wave = Math.sin((x * 0.52 + y * 0.75) + rnd() * 0.15);
+            if (wave > 0.48) {
+              grid[y][x] = 4;
+              continue;
+            }
+          }
+
+          // Pecked Hardstone Stipple (Axe / Diorite)
+          if (mat.stipple && rnd() > 0.70) {
+            grid[y][x] = 5;
+            continue;
+          }
+
+          // Vitreous Luster Sheen (Zaleski / Flint Ridge)
+          if (mat.sheen > 0.6 && Math.abs(nx - 0.16) < 0.05 && ny > 0.28 && ny < 0.65) {
+            grid[y][x] = 6;
+            continue;
+          }
+
+          // Concoidal pressure flakes
+          if (rnd() > 0.78) grid[y][x] = 2;
+        }
+      }
+
+      // Draw Grid to Canvas
+      for (let y = 0; y < gridH; y++) {
+        for (let x = 0; x < gridW; x++) {
+          const cell = grid[y][x];
+          if (cell === 0) continue;
+
+          let [r, g, b] = mat.baseColor;
+          if (cell === 2) [r, g, b] = mat.edgeColor;
+          else if (cell === 3) [r, g, b] = [Math.floor(mat.baseColor[0]*0.72), Math.floor(mat.baseColor[1]*0.72), Math.floor(mat.baseColor[2]*0.72)];
+          else if (cell === 4) [r, g, b] = mat.bandColor || mat.flakeColor;
+          else if (cell === 5) [r, g, b] = [Math.floor(mat.baseColor[0]*1.35), Math.floor(mat.baseColor[1]*1.35), Math.floor(mat.baseColor[2]*1.35)];
+          else if (cell === 6) [r, g, b] = [245, 250, 255];
+
+          const light = 1.0 + ((gridW - x) * 0.006) - (y * 0.007);
+          r = Math.min(255, Math.floor(r * light));
+          g = Math.min(255, Math.floor(g * light));
+          b = Math.min(255, Math.floor(b * light));
+
+          ctx.fillStyle = `rgb(${r},${g},${b})`;
+          ctx.fillRect(Math.floor(x * cellPx), Math.floor(y * cellPx), Math.ceil(cellPx), Math.ceil(cellPx));
+        }
+      }
+    }
+
+    /* =========================================================================
+       GAME STATE
+       ========================================================================= */
+    const State = {
+      money: 450,
+      inventory: [],
+      shadowbox: Array(8).fill(null),
+      auctions: [],
+      selectedItem: null,
+      invFilter: 'all',
+
+      // Hunt Grid
+      huntSite: 'flintridge',
+      tapsLeft: 22,
+      gridTiles: [],
+
+      // Active Cache
+      activeCache: null,
+
+      // Market & Dealers
+      dealers: [],
+      activeDealer: null,
+      haggleBonus: 0.88,
+      dealerPatience: 4,
+
+      // Grading Lab
+      gradingCandidate: null
+    };
+
+    function saveGameState() {
+      try {
+        const payload = {
+          money: State.money,
+          inventory: State.inventory,
+          shadowbox: State.shadowbox,
+          auctions: State.auctions
+        };
+        localStorage.setItem('nativediggers_save_v1', JSON.stringify(payload));
+      } catch (e) {
+        console.warn('Local save warning', e);
+      }
+    }
+
+    function loadGameState() {
+      try {
+        const data = localStorage.getItem('nativediggers_save_v1');
+        if (data) {
+          const parsed = JSON.parse(data);
+          State.money = parsed.money ?? 450;
+          State.inventory = parsed.inventory || [];
+          State.shadowbox = parsed.shadowbox || Array(8).fill(null);
+          State.auctions = parsed.auctions || [];
+        }
+      } catch (e) {
+        console.warn('Fresh state initialized', e);
+      }
+    }
+
+    /* =========================================================================
+       HUNTING GROUNDS & SOIL EXPEDITIONS
+       ========================================================================= */
+    const HUNT_LOCATIONS = {
+      flintridge: {
+        name: 'Flint Ridge Quarry Pits',
+        badge: 'LICKING CO., OH',
+        color: '#281d22',
+        singleChance: 0.25,
+        cacheChance: 0.04,
+        lore: 'Glacial drift and ancient quarry pits rich with multicolored jewel chalcedony.'
+      },
+      scioto: {
+        name: 'Scioto River Floodplain',
+        badge: 'ROSS CO., OH',
+        color: '#1b2229',
+        singleChance: 0.28,
+        cacheChance: 0.045,
+        lore: 'River silt terraces where spring floodwaters wash out Adena and Hopewell caches.'
+      },
+      cahokia: {
+        name: 'Cahokia Creek Alluvials',
+        badge: 'ILLINOIS BASIN',
+        color: '#24221d',
+        singleChance: 0.24,
+        cacheChance: 0.035,
+        lore: 'Creek alluvium bordering the ancient metropolis, rich with white Burlington points.'
+      },
+      wabash: {
+        name: 'Wabash Lowland Bluffs',
+        badge: 'INDIANA VALLEY',
+        color: '#1d2421',
+        singleChance: 0.23,
+        cacheChance: 0.038,
+        lore: 'Limestone river bluffs strewn with bullseye Wyandotte hornstone cores and Dovetails.'
+      },
+      ozarks: {
+        name: 'Ozark Escarpment Overhang',
+        badge: 'MO / AR ESCARPMENT',
+        color: '#28241d',
+        singleChance: 0.22,
+        cacheChance: 0.035,
+        lore: 'Dry rockshelter hearth deposits shielding ancient Dalton and Paleo toolkits.'
+      }
+    };
+
+    function resetExpeditionGrid(chargeFee = false) {
+      if (chargeFee) {
+        if (State.money < 15) {
+          showToast('Need $15 to scout a new field site!');
+          return;
+        }
+        State.money -= 15;
+        Sound.coinRegister();
+      }
+
+      const site = HUNT_LOCATIONS[State.huntSite];
+      State.tapsLeft = 22;
+      State.gridTiles = [];
+      const totalTiles = 32;
+
+      let cacheSeeded = Math.random() < site.cacheChance;
+      let cacheIndex = cacheSeeded ? Math.floor(Math.random() * totalTiles) : -1;
+      let pieceCount = 0;
+
+      for (let i = 0; i < totalTiles; i++) {
+        if (i === cacheIndex) {
+          State.gridTiles.push({ type: 'cache', revealed: false, brushed: false, artifact: null });
+          continue;
+        }
+
+        const roll = Math.random();
+        if (roll < site.singleChance) {
+          pieceCount++;
+          State.gridTiles.push({
+            type: 'point',
+            revealed: false,
+            brushed: false,
+            artifact: generateProceduralArtifact()
+          });
+        } else if (roll < site.singleChance + 0.32) {
+          State.gridTiles.push({ type: 'flake', revealed: false, brushed: false, artifact: null });
+        } else {
+          State.gridTiles.push({ type: 'empty', revealed: false, brushed: false, artifact: null });
+        }
+      }
+
+      renderExpeditionGrid();
+      updateTopBar();
+      document.getElementById('hunt-detected-label').textContent = `${pieceCount} anomalies`;
+      document.getElementById('hunt-taps-label').textContent = State.tapsLeft;
+      document.getElementById('hunt-region-badge').textContent = site.badge;
+      logHuntJournal(`Boots deployed at ${site.name}. Sensors active.`);
+    }
+
+    function renderExpeditionGrid() {
+      const container = document.getElementById('hunt-grid-container');
+      container.innerHTML = '';
+      const site = HUNT_LOCATIONS[State.huntSite];
+
+      State.gridTiles.forEach((tile, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'w-10 h-10 sm:w-11 sm:h-11 border-2 border-stone-800 rounded flex items-center justify-center text-xs select-none transition-all active:scale-95';
+
+        if (!tile.revealed) {
+          btn.style.backgroundColor = site.color;
+          btn.innerHTML = '<span class="text-stone-600 text-[10px]">🪨</span>';
+        } else {
+          btn.style.backgroundColor = '#0a0d13';
+          if (tile.type === 'empty') {
+            btn.innerHTML = '<span class="text-stone-700">·</span>';
+          } else if (tile.type === 'flake') {
+            btn.innerHTML = '<span class="text-amber-500 font-bold text-[10px]">▲</span>';
+          } else if (tile.type === 'point') {
+            if (!tile.brushed) {
+              btn.innerHTML = '<span class="text-cyan-300 font-bold animate-pulse text-sm">✨</span>';
+            } else {
+              btn.innerHTML = '<span class="text-stone-500 text-xs">✓</span>';
+            }
+          } else if (tile.type === 'cache') {
+            if (!tile.brushed) {
+              btn.innerHTML = '<span class="text-amber-400 font-bold animate-bounce text-base">🏺</span>';
+            } else {
+              btn.innerHTML = '<span class="text-amber-500 text-xs">⚡</span>';
+            }
+          }
+        }
+
+        btn.onclick = () => onSoilTileClicked(tile, idx);
+        container.appendChild(btn);
+      });
+    }
+
+    function onSoilTileClicked(tile, idx) {
+      if (tile.revealed && (tile.type === 'empty' || tile.type === 'flake')) return;
+      if (tile.revealed && tile.brushed) return;
+
+      if (!tile.revealed) {
+        if (State.tapsLeft <= 0) {
+          showToast('Expedition taps depleted! Scout a new field.');
+          return;
+        }
+
+        State.tapsLeft--;
+        document.getElementById('hunt-taps-label').textContent = State.tapsLeft;
+        tile.revealed = true;
+        Sound.knapTap();
+
+        if (tile.type === 'empty') {
+          logHuntJournal('Sterile river sand. No debitage.');
+        } else if (tile.type === 'flake') {
+          logHuntJournal('Flint debitage flake exposed! Workshop nearby.', 'text-amber-300');
+        } else if (tile.type === 'point') {
+          logHuntJournal('✦ WORKED MARGIN SPOTTED! Brush sediment clean!', 'text-cyan-300 font-bold');
+        } else if (tile.type === 'cache') {
+          logHuntJournal('⚡ RITUAL ARTIFACT CACHE DETECTED IN CUTBANK!', 'text-amber-400 font-bold');
+          Sound.cacheJingle();
+        }
+      } else {
+        // Brushing action
+        tile.brushed = true;
+        if (tile.type === 'point') {
+          Sound.brushGravel();
+          Sound.relicFanfare();
+          const item = tile.artifact;
+          if (State.inventory.length < 35) {
+            State.inventory.push(item);
+            updateLastFoundPreview(item);
+            showToast(`Recovered ${item.title} (${item.grade})!`);
+            logHuntJournal(`★ Recovered: ${item.title} (${item.material.name}, ${item.grade})!`, 'text-emerald-400 font-bold');
+          } else {
+            showToast('Bag full! Overflow sold to local farm collector.');
+            State.money += Math.round(item.value * 0.45);
+          }
+        } else if (tile.type === 'cache') {
+          openPrehistoricCacheModal();
+          return;
+        }
+      }
+
+      renderExpeditionGrid();
+      updateTopBar();
+      saveGameState();
+    }
+
+    function onHuntSiteChange() {
+      State.huntSite = document.getElementById('select-hunt-site').value;
+      resetExpeditionGrid(false);
+    }
+
+    function forceCacheInCurrentField() {
+      const unrev = State.gridTiles.filter(t => !t.revealed);
+      if (unrev.length > 0) {
+        unrev[0].type = 'cache';
+        showToast('Dev: Seeded ancient cache into upcoming tile!');
+      } else {
+        showToast('All tiles already uncovered! Scout new field.');
+      }
+    }
+
+    function updateLastFoundPreview(relic) {
+      const c = document.getElementById('canvas-last-recovery');
+      renderPixelLithic(c, relic);
+      document.getElementById('last-find-name').textContent = relic.title;
+      document.getElementById('last-find-meta').textContent = `${relic.material.name} • ${relic.grade}`;
+      document.getElementById('last-find-val').textContent = `Val: $${relic.value.toLocaleString()}`;
+    }
+
+    function logHuntJournal(text, css = '') {
+      const journal = document.getElementById('hunt-journal-log');
+      const row = document.createElement('div');
+      if (css) row.className = css;
+      row.textContent = `> ${text}`;
+      journal.prepend(row);
+    }
+
+    /* =========================================================================
+       PREHISTORIC CACHE SYSTEM (4 to 20 Pieces Buried Together)
+       ========================================================================= */
+    const CACHE_PRESETS = [
+      {
+        title: 'Adena Red Ochre Ritual Blade Cache',
+        lore: 'Buried neatly along Paint Creek within a ceremonial clay lining, covered in red ochre pigment between dolomitic limestone slabs.'
+      },
+      {
+        title: 'Flint Ridge Prehistoric Quarry Master Toolkit',
+        lore: 'An undisturbed cache of Dovetails and gem preforms concealed beneath the roots of an ancient white oak along the Licking River terrace.'
+      },
+      {
+        title: 'Scioto Valley Paleo-Indian Hunter Cache',
+        lore: 'A sealed cache of matched fluted Clovis spearpoints and Dalton butchering tools resting in alluvial gravel since the late Pleistocene.'
+      },
+      {
+        title: 'Cahokia Elite Ceremonial Arrowpoint Cache',
+        lore: 'A clustered deposit of gem tri-points and finely notched ceremonial blades placed during sacred mound construction.'
+      }
+    ];
+
+    function openPrehistoricCacheModal(forcedCount = null) {
+      const count = forcedCount || (Math.floor(Math.random() * 17) + 4); // 4 to 20 artifacts!
+      const preset = CACHE_PRESETS[Math.floor(Math.random() * CACHE_PRESETS.length)];
+
+      const artifacts = [];
+      for (let i = 0; i < count; i++) {
+        artifacts.push(generateProceduralArtifact());
+      }
+
+      State.activeCache = {
+        title: preset.title,
+        lore: preset.lore,
+        items: artifacts.map((item, idx) => ({
+          artifact: item,
+          uncovered: false,
+          id: idx
+        }))
+      };
+
+      document.getElementById('cache-title').textContent = preset.title;
+      document.getElementById('cache-description').textContent = `"${preset.lore}"`;
+      document.getElementById('cache-bundle-tally').textContent = `${count} RELICS`;
+      document.getElementById('nav-cache-alert-dot').classList.remove('hidden');
+
+      renderCacheExcavationBed();
+      switchTab('cache');
+      Sound.cacheJingle();
+      showToast(`⚡ DISCOVERED ANCIENT CACHE OF ${count} RELICS!`);
+    }
+
+    function renderCacheExcavationBed() {
+      const grid = document.getElementById('cache-grid');
+      grid.innerHTML = '';
+
+      if (!State.activeCache) {
+        grid.innerHTML = `<div class="col-span-full py-12 text-center text-stone-500 font-term text-lg">No active cache discovered yet. Explore fields or trigger in God Mode!</div>`;
+        return;
+      }
+
+      let cleared = 0;
+      State.activeCache.items.forEach(slot => {
+        if (slot.uncovered) cleared++;
+
+        const card = document.createElement('div');
+        card.className = `p-2 rounded border-2 flex flex-col items-center justify-between text-center transition-all ${
+          slot.uncovered
+            ? 'bg-[#121622] border-amber-500/80'
+            : 'bg-[#19130c] border-amber-900/60 cursor-pointer hover:border-amber-400'
+        }`;
+
+        if (!slot.uncovered) {
+          card.innerHTML = `
+            <div class="w-12 h-12 flex items-center justify-center text-2xl animate-pulse">🌿</div>
+            <div class="text-[8px] text-amber-400 font-mono mt-1">BRUSH SILT</div>
+          `;
+          card.onclick = () => {
+            slot.uncovered = true;
+            Sound.brushGravel();
+            Sound.knapTap();
+            renderCacheExcavationBed();
+          };
+        } else {
+          const c = document.createElement('canvas');
+          c.width = 48;
+          c.height = 48;
+          c.className = 'w-12 h-12';
+          renderPixelLithic(c, slot.artifact);
+
+          const title = document.createElement('div');
+          title.className = 'text-[9px] font-bold text-amber-200 truncate w-full mt-1';
+          title.textContent = slot.artifact.title.split(' ')[0];
+
+          const meta = document.createElement('div');
+          meta.className = 'text-[8px] font-mono text-emerald-400';
+          meta.textContent = `${slot.artifact.grade} • $${slot.artifact.value}`;
+
+          card.appendChild(c);
+          card.appendChild(title);
+          card.appendChild(meta);
+        }
+
+        grid.appendChild(card);
+      });
+
+      const total = State.activeCache.items.length;
+      const pct = Math.round((cleared / total) * 100);
+      document.getElementById('cache-progress-pct').textContent = `${pct}% Cleared (${cleared}/${total})`;
+    }
+
+    function claimCompleteCache() {
+      if (!State.activeCache) return;
+
+      let stored = 0;
+      let soldOverflow = 0;
+
+      State.activeCache.items.forEach(slot => {
+        const item = slot.artifact;
+        if (State.inventory.length < 35) {
+          State.inventory.push(item);
+          stored++;
+        } else {
+          State.money += Math.round(item.value * 0.5);
+          soldOverflow++;
+        }
+      });
+
+      Sound.coinRegister();
+      Sound.relicFanfare();
+      showToast(`Cache Claimed! ${stored} placed in Field Bag, ${soldOverflow} sold for overflow cash.`);
+
+      State.activeCache = null;
+      document.getElementById('nav-cache-alert-dot').classList.add('hidden');
+      renderCacheExcavationBed();
+      updateTopBar();
+      saveGameState();
+      switchTab('inventory');
+    }
+
+    /* =========================================================================
+       INVENTORY & SPECIMEN INSPECTOR
+       ========================================================================= */
+    function renderInventoryGrid() {
+      const grid = document.getElementById('inventory-grid');
+      grid.innerHTML = '';
+
+      const filtered = State.inventory.filter(item => {
+        if (State.invFilter === 'all') return true;
+        if (State.invFilter === 'coa') return item.coa !== null;
+        return item.category === State.invFilter;
+      });
+
+      document.getElementById('inv-capacity-counter').textContent = `${State.inventory.length}/35`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-full py-12 text-center text-stone-500 font-term text-base">Bag contains no relics for this category filter.</div>`;
+        return;
+      }
+
+      filtered.forEach(item => {
+        const isSel = State.selectedItem && State.selectedItem.id === item.id;
+        const card = document.createElement('div');
+        card.className = `p-2 rounded border-2 cursor-pointer flex flex-col items-center justify-between text-center transition-all ${
+          isSel ? 'bg-[#1e2638] border-amber-400 scale-[1.02]' : 'bg-[#0e121a] border-stone-800 hover:border-stone-600'
+        }`;
+
+        const c = document.createElement('canvas');
+        c.width = 48;
+        c.height = 48;
+        c.className = 'w-12 h-12 my-1';
+        renderPixelLithic(c, item);
+
+        const title = document.createElement('div');
+        title.className = 'text-[9px] font-bold text-amber-200 truncate w-full';
+        title.textContent = item.title.split(' ')[0];
+
+        const meta = document.createElement('div');
+        meta.className = 'text-[8px] font-mono text-stone-400 flex items-center gap-1 justify-center';
+        meta.innerHTML = `${item.grade} • $${item.value} ${item.coa ? '<span class="text-cyan-300">★</span>' : ''}`;
+
+        card.appendChild(c);
+        card.appendChild(title);
+        card.appendChild(meta);
+
+        card.onclick = () => inspectSpecimen(item);
+        grid.appendChild(card);
+      });
+    }
+
+    function inspectSpecimen(item) {
+      State.selectedItem = item;
+      Sound.knapTap();
+
+      document.getElementById('inspect-name').textContent = item.title.toUpperCase();
+      document.getElementById('inspect-era-text').textContent = `Period: ${item.era}`;
+      document.getElementById('inspect-grade-badge').textContent = `${item.grade} (${item.gradeLabel})`;
+      document.getElementById('inspect-typology').textContent = item.title;
+      document.getElementById('inspect-mineral').textContent = `${item.material.name} (${item.material.origin})`;
+      document.getElementById('inspect-dimensions').textContent = `${item.length}" L × ${item.width}" W × ${item.thick}" T`;
+      document.getElementById('inspect-knapping-style').textContent = item.diagnostics;
+      document.getElementById('inspect-cortex').textContent = item.wear;
+      document.getElementById('inspect-fair-value').textContent = `$${item.value.toLocaleString()}`;
+      document.getElementById('inspect-historical-lore').textContent = `"${item.desc} Mineral notes: ${item.material.desc}"`;
+
+      const coaBadge = document.getElementById('inspect-coa-stamp');
+      if (item.coa) {
+        coaBadge.classList.remove('hidden');
+        coaBadge.textContent = `★ ${item.coa.certNumber}`;
+      } else {
+        coaBadge.classList.add('hidden');
+      }
+
+      const c = document.getElementById('canvas-inspect-large');
+      renderPixelLithic(c, item);
+
+      renderInventoryGrid();
+    }
+
+    function setInvCategoryFilter(cat) {
+      State.invFilter = cat;
+      renderInventoryGrid();
+    }
+
+    /* =========================================================================
+       MLGS AUTHENTICATION & GRADING LAB
+       ========================================================================= */
+    function populateGradingSelect() {
+      const sel = document.getElementById('select-grading-candidate');
+      sel.innerHTML = '<option value="">-- Choose specimen to authenticate --</option>';
+
+      State.inventory.forEach(item => {
+        if (!item.coa) {
+          const opt = document.createElement('option');
+          opt.value = item.id;
+          opt.textContent = `${item.title} (${item.grade}) - Val: $${item.value}`;
+          sel.appendChild(opt);
+        }
+      });
+
+      document.getElementById('grading-candidate-preview').classList.add('hidden');
+    }
+
+    function onGradingCandidateSelected() {
+      const id = document.getElementById('select-grading-candidate').value;
+      if (!id) {
+        document.getElementById('grading-candidate-preview').classList.add('hidden');
+        State.gradingCandidate = null;
+        return;
+      }
+
+      const item = State.inventory.find(i => i.id === id);
+      if (!item) return;
+
+      State.gradingCandidate = item;
+      document.getElementById('grading-candidate-preview').classList.remove('hidden');
+      document.getElementById('grading-candidate-title').textContent = item.title;
+      document.getElementById('grading-candidate-meta').textContent = `${item.material.name} • Raw ${item.grade}`;
+      document.getElementById('grading-candidate-val').textContent = `$${item.value}`;
+
+      const c = document.getElementById('canvas-grading-thumb');
+      renderPixelLithic(c, item);
+    }
+
+    function executeAuthenticationProcess() {
+      if (!State.gradingCandidate) {
+        showToast('Select an uncertified relic to authenticate!');
+        return;
+      }
+      if (State.money < 45) {
+        showToast('Insufficient funds! Lab fee is $45.');
+        return;
+      }
+
+      State.money -= 45;
+      const item = State.gradingCandidate;
+      certifyRelic(item);
+
+      Sound.stampCert();
+      Sound.relicFanfare();
+      showToast(`Certified! Issued Certificate ${item.coa.certNumber}!`);
+
+      // Fill Certificate Document
+      document.getElementById('coa-reg-num').textContent = `#${item.coa.certNumber}`;
+      document.getElementById('coa-grade-stamp').textContent = `${item.grade} • CERTIFIED`;
+      document.getElementById('coa-typology').textContent = item.title;
+      document.getElementById('coa-mineral').textContent = item.material.name;
+      document.getElementById('coa-wear').textContent = item.coa.microWear;
+      document.getElementById('coa-grinding').textContent = item.coa.grinding;
+      document.getElementById('coa-patina').textContent = item.coa.patinaIndex;
+      document.getElementById('coa-valuation').textContent = `$${item.value.toLocaleString()}`;
+      document.getElementById('coa-inspector-verdict').textContent = `"Verified authentic North American prehistoric artifact. Concoidal fracture ripples and microscopic mineral patination conform precisely with genuine ancient lithic manufacture."`;
+
+      const c = document.getElementById('canvas-coa-view');
+      renderPixelLithic(c, item);
+
+      updateTopBar();
+      populateGradingSelect();
+      saveGameState();
+    }
+
+    function sendSelectedToGrading() {
+      if (!State.selectedItem) return;
+      if (State.selectedItem.coa) {
+        showToast('Specimen already has an official COA!');
+        return;
+      }
+      switchTab('grading');
+      document.getElementById('select-grading-candidate').value = State.selectedItem.id;
+      onGradingCandidateSelected();
+    }
+
+    /* =========================================================================
+       BUILT-IN FIELD GUIDE & TYPOLOGY ENCYCLOPEDIA
+       ========================================================================= */
+    function renderFieldGuideCatalog(filterTerm = '') {
+      const container = document.getElementById('guide-catalog-list');
+      container.innerHTML = '';
+
+      const term = filterTerm.toLowerCase().trim();
+      const list = MIDWEST_TYPOLOGIES.filter(t => {
+        if (!term) return true;
+        return t.name.toLowerCase().includes(term) || t.era.toLowerCase().includes(term) || t.distribution.toLowerCase().includes(term);
+      });
+
+      list.forEach(typeDef => {
+        const dummy = {
+          title: typeDef.name,
+          category: typeDef.category,
+          shape: typeDef.shape,
+          material: MIDWEST_MINERALS.find(m => typeDef.allowedMats.includes(m.id)) || MIDWEST_MINERALS[0],
+          grade: 'G10',
+          seed: 424242
+        };
+
+        const card = document.createElement('div');
+        card.className = 'pixel-inset p-3 rounded flex gap-3 items-start border border-stone-800';
+
+        const c = document.createElement('canvas');
+        c.width = 64;
+        c.height = 64;
+        c.className = 'w-16 h-16 bg-black border border-stone-700 rounded shrink-0';
+        renderPixelLithic(c, dummy);
+
+        const info = document.createElement('div');
+        info.className = 'text-xs space-y-1';
+        info.innerHTML = `
+          <div class="font-bold text-amber-300 font-pixel text-[10px]">${typeDef.name}</div>
+          <div class="text-[9px] text-cyan-300 font-mono">${typeDef.era}</div>
+          <div class="text-[10px] text-stone-300 font-term leading-tight"><strong>Diagnostics:</strong> ${typeDef.diagnostics}</div>
+          <div class="text-[9px] text-stone-400 font-mono"><strong>Range:</strong> ${typeDef.distribution}</div>
+          <div class="text-[9px] text-emerald-400 font-mono"><strong>Fair Spectrum:</strong> $${typeDef.baseVal * 0.4} - $${typeDef.baseVal * 2.8}</div>
+        `;
+
+        card.appendChild(c);
+        card.appendChild(info);
+        container.appendChild(card);
+      });
+    }
+
+    function filterFieldGuide() {
+      const term = document.getElementById('guide-search-input').value;
+      renderFieldGuideCatalog(term);
+    }
+
+    /* =========================================================================
+       VELVET SHADOWBOX CABINET
+       ========================================================================= */
+    function renderShadowboxCabinet() {
+      let totalVal = 0;
+      State.shadowbox.forEach((item, idx) => {
+        const slot = document.getElementById(`shadow-slot-${idx}`);
+        slot.className = 'h-40 bg-black/40 border-2 border-dashed border-stone-700 rounded flex flex-col items-center justify-center p-2 text-center transition-colors';
+        slot.innerHTML = '';
+
+        if (!item) {
+          slot.innerHTML = `
+            <div class="text-stone-600 font-term text-base">+ EMPTY MOUNT</div>
+            <div class="text-[8px] text-stone-500">Mount from Bag</div>
+          `;
+        } else {
+          totalVal += item.value;
+          slot.classList.remove('border-dashed');
+          slot.classList.add('border-amber-600/60');
+
+          const c = document.createElement('canvas');
+          c.width = 64;
+          c.height = 64;
+          c.className = 'w-16 h-16 drop-shadow-md';
+          renderPixelLithic(c, item);
+
+          const title = document.createElement('div');
+          title.className = 'text-[9px] font-bold text-amber-200 mt-1 truncate w-full';
+          title.textContent = item.title;
+
+          const meta = document.createElement('div');
+          meta.className = 'text-[8px] font-mono text-emerald-400';
+          meta.textContent = `${item.grade} • $${item.value}`;
+
+          const unmountBtn = document.createElement('button');
+          unmountBtn.className = 'pixel-btn bg-stone-800 text-stone-300 text-[8px] px-2 py-0.5 mt-1';
+          unmountBtn.textContent = 'Unmount';
+          unmountBtn.onclick = (e) => {
+            e.stopPropagation();
+            unmountShadowboxSlot(idx);
+          };
+
+          slot.appendChild(c);
+          slot.appendChild(title);
+          slot.appendChild(meta);
+          slot.appendChild(unmountBtn);
+        }
+      });
+
+      document.getElementById('shadowbox-total-value').textContent = `$${totalVal.toLocaleString()}`;
+    }
+
+    function mountSelectedToShadowbox() {
+      if (!State.selectedItem) {
+        showToast('Select an artifact in your Field Bag first!');
+        return;
+      }
+      const emptyIdx = State.shadowbox.findIndex(s => s === null);
+      if (emptyIdx === -1) {
+        showToast('Shadowbox frame is completely full!');
+        return;
+      }
+
+      const item = State.selectedItem;
+      State.shadowbox[emptyIdx] = item;
+      State.inventory = State.inventory.filter(i => i.id !== item.id);
+      State.selectedItem = null;
+
+      Sound.relicFanfare();
+      showToast(`Mounted ${item.title} into velvet shadowbox frame!`);
+      updateTopBar();
+      renderShadowboxCabinet();
+      renderInventoryGrid();
+      saveGameState();
+    }
+
+    function unmountShadowboxSlot(idx) {
+      if (State.inventory.length >= 35) {
+        showToast('Field bag is full! Cannot unmount.');
+        return;
+      }
+      const item = State.shadowbox[idx];
+      State.shadowbox[idx] = null;
+      State.inventory.push(item);
+      Sound.knapTap();
+      renderShadowboxCabinet();
+      updateTopBar();
+      saveGameState();
+    }
+
+    function unmountAllShadowboxRelics() {
+      let count = 0;
+      for (let i = 0; i < State.shadowbox.length; i++) {
+        if (State.shadowbox[i] && State.inventory.length < 35) {
+          State.inventory.push(State.shadowbox[i]);
+          State.shadowbox[i] = null;
+          count++;
+        }
+      }
+      if (count > 0) {
+        Sound.knapTap();
+        showToast(`Unmounted ${count} relics back to Bag.`);
+        renderShadowboxCabinet();
+        updateTopBar();
+        saveGameState();
+      }
+    }
+
+    function updateShadowboxMatColor() {
+      const color = document.getElementById('select-mat-color').value;
+      const frame = document.getElementById('shadowbox-frame');
+      if (color === 'crimson') {
+        frame.style.background = 'radial-gradient(circle at center, #2e080b 0%, #150204 100%)';
+      } else if (color === 'navy') {
+        frame.style.background = 'radial-gradient(circle at center, #0b1a2e 0%, #030811 100%)';
+      } else if (color === 'emerald') {
+        frame.style.background = 'radial-gradient(circle at center, #09281a 0%, #020f09 100%)';
+      } else if (color === 'black') {
+        frame.style.background = 'radial-gradient(circle at center, #181818 0%, #050505 100%)';
+      }
+    }
+
+    /* =========================================================================
+       TRADE SHOW FLOOR & LIVE TIMED AUCTIONS
+       ========================================================================= */
+    const DEALER_LISTING = [
+      { name: '"Flint Ridge Frank"', avatar: '🤠', category: 'point', note: 'Seeking: Gem Dovetails & Fluted Clovis', mult: 1.18 },
+      { name: 'Dr. Evelyn Ward', avatar: '🧐', category: 'blade', note: 'Seeking: Adena Cache Knives & Mounds Provenance', mult: 1.25 },
+      { name: 'Scioto Dan', avatar: '🧔', category: 'axe', note: 'Seeking: 3/4 Grooved Hardstone Axes & Celts', mult: 1.15 },
+      { name: 'Cahokia Clara', avatar: '👩‍🌾', category: 'slate', note: 'Seeking: Glacial Kame Birdstones & Slate Weights', mult: 1.30 }
+    ];
+
+    function shuffleMarketDealers() {
+      State.dealers = DEALER_LISTING.map(d => ({ ...d }));
+      renderDealerList();
+      selectDealerProfile(State.dealers[0]);
+    }
+
+    function renderDealerList() {
+      const list = document.getElementById('dealer-card-list');
+      list.innerHTML = '';
+
+      State.dealers.forEach(dealer => {
+        const row = document.createElement('div');
+        const isSel = State.activeDealer && State.activeDealer.name === dealer.name;
+        row.className = `p-2.5 rounded border-2 cursor-pointer flex items-center justify-between transition-all ${
+          isSel ? 'bg-[#1b2333] border-amber-400' : 'bg-[#0f131a] border-stone-800 hover:border-stone-600'
+        }`;
+
+        row.innerHTML = `
+          <div class="flex items-center gap-2.5">
+            <span class="text-2xl">${dealer.avatar}</span>
+            <div>
+              <div class="font-bold text-xs text-amber-200">${dealer.name}</div>
+              <div class="text-[9px] text-stone-400">${dealer.note}</div>
+            </div>
+          </div>
+          <button class="pixel-btn bg-stone-800 text-stone-200 text-[9px] px-2 py-1 rounded">Talk</button>
+        `;
+
+        row.onclick = () => selectDealerProfile(dealer);
+        list.appendChild(row);
+      });
+    }
+
+    function selectDealerProfile(dealer) {
+      State.activeDealer = dealer;
+      State.haggleBonus = 0.88;
+      State.dealerPatience = 4;
+
+      document.getElementById('active-dealer-avatar').textContent = dealer.avatar;
+      document.getElementById('active-dealer-name').textContent = dealer.name;
+      document.getElementById('active-dealer-focus').textContent = dealer.note;
+      document.getElementById('active-dealer-patience').textContent = `Patience: ${'★'.repeat(State.dealerPatience)}${'☆'.repeat(4 - State.dealerPatience)}`;
+      document.getElementById('dealer-dialogue-quote').textContent = `"${dealer.name} greets you: 'Welcome to my booth! Let me see what you've dug up across the Midwest.'"`;
+
+      populateTradeRelicDropdown();
+      renderDealerList();
+    }
+
+    function populateTradeRelicDropdown() {
+      const sel = document.getElementById('select-trade-relic');
+      sel.innerHTML = '<option value="">-- Choose specimen to haggle --</option>';
+
+      State.inventory.forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item.id;
+        opt.textContent = `${item.title} (${item.grade}) - Val: $${item.value} ${item.coa ? '[COA]' : ''}`;
+        sel.appendChild(opt);
+      });
+
+      document.getElementById('trade-calculation-box').classList.add('hidden');
+    }
+
+    function onTradeOfferRelicChange() {
+      const id = document.getElementById('select-trade-relic').value;
+      if (!id) {
+        document.getElementById('trade-calculation-box').classList.add('hidden');
+        return;
+      }
+
+      const item = State.inventory.find(i => i.id === id);
+      if (!item) return;
+
+      const dealer = State.activeDealer;
+      const prefBonus = dealer.category === item.category ? dealer.mult : 1.0;
+      const coaBonus = item.coa ? 1.25 : 1.0;
+      const offer = Math.round(item.value * State.haggleBonus * prefBonus * coaBonus);
+
+      document.getElementById('trade-calculation-box').classList.remove('hidden');
+      document.getElementById('trade-fair-val').textContent = `$${item.value}`;
+      document.getElementById('trade-cash-offer').textContent = `$${offer}`;
+    }
+
+    function haggleTrade(action) {
+      const id = document.getElementById('select-trade-relic').value;
+      if (!id) {
+        showToast('Choose an artifact to negotiate!');
+        return;
+      }
+
+      if (State.dealerPatience <= 1) {
+        document.getElementById('dealer-dialogue-quote').textContent = `"${State.activeDealer.name} frowns: 'That is my final cash figure, partner. Take it or keep it in your frame.'"`;
+        return;
+      }
+
+      State.dealerPatience--;
+      document.getElementById('active-dealer-patience').textContent = `Patience: ${'★'.repeat(State.dealerPatience)}${'☆'.repeat(4 - State.dealerPatience)}`;
+
+      if (action === 'counter') {
+        if (Math.random() > 0.35) {
+          State.haggleBonus += 0.12;
+          Sound.coinRegister();
+          document.getElementById('dealer-dialogue-quote').textContent = `"${State.activeDealer.name} nods thoughtfully: 'Alright, you drive a hard bargain. I can bump my cash offer up.'"`;
+        } else {
+          document.getElementById('dealer-dialogue-quote').textContent = `"${State.activeDealer.name} grimaces: 'Can't do it. Relic market is soft on that particular variety.'"`;
+        }
+      } else if (action === 'provenance') {
+        const item = State.inventory.find(i => i.id === id);
+        if (item && item.coa) {
+          State.haggleBonus += 0.20;
+          Sound.stampCert();
+          document.getElementById('dealer-dialogue-quote').textContent = `"${State.activeDealer.name} examines the MLGS Certificate: 'Certified authenticity sealed by the registry! That adds solid collector trust.'"`;
+        } else {
+          State.haggleBonus += 0.08;
+          Sound.knapTap();
+          document.getElementById('dealer-dialogue-quote').textContent = `"${State.activeDealer.name} studies the patina: 'Documented creek gravel provenance helps. I can offer slightly more.'"`;
+        }
+      }
+
+      onTradeOfferRelicChange();
+    }
+
+    function finalizeDealerSale() {
+      const id = document.getElementById('select-trade-relic').value;
+      if (!id) {
+        showToast('Select an artifact first!');
+        return;
+      }
+
+      const item = State.inventory.find(i => i.id === id);
+      if (!item) return;
+
+      const dealer = State.activeDealer;
+      const prefBonus = dealer.category === item.category ? dealer.mult : 1.0;
+      const coaBonus = item.coa ? 1.25 : 1.0;
+      const payout = Math.round(item.value * State.haggleBonus * prefBonus * coaBonus);
+
+      State.money += payout;
+      State.inventory = State.inventory.filter(i => i.id !== item.id);
+
+      Sound.coinRegister();
+      Sound.relicFanfare();
+      showToast(`Sold ${item.title} to ${dealer.name} for $${payout}!`);
+      document.getElementById('dealer-dialogue-quote').textContent = `"${dealer.name} shakes hands: 'Deal! Always a pleasure buying genuine Midwestern lithics.'"`;
+
+      updateTopBar();
+      populateTradeRelicDropdown();
+      saveGameState();
+    }
+
+    /* Live Timed Auction System */
+    function switchMarketView(mode) {
+      if (mode === 'tradeshow') {
+        document.getElementById('view-tradeshow').classList.remove('hidden');
+        document.getElementById('view-auctions').classList.add('hidden');
+        document.getElementById('subnav-tradeshow').className = 'pixel-btn bg-amber-600 text-black font-bold px-3 py-1.5 rounded';
+        document.getElementById('subnav-auctions').className = 'pixel-btn bg-stone-800 text-stone-300 px-3 py-1.5 rounded';
+      } else {
+        document.getElementById('view-tradeshow').classList.add('hidden');
+        document.getElementById('view-auctions').classList.remove('hidden');
+        document.getElementById('subnav-tradeshow').className = 'pixel-btn bg-stone-800 text-stone-300 px-3 py-1.5 rounded';
+        document.getElementById('subnav-auctions').className = 'pixel-btn bg-cyan-700 text-white font-bold px-3 py-1.5 rounded';
+        renderActiveAuctions();
+      }
+    }
+
+    function listSelectedInLiveAuction() {
+      if (!State.selectedItem) return;
+      if (State.auctions.length >= 6) {
+        showToast('Maximum 6 active lots allowed simultaneously!');
+        return;
+      }
+
+      const item = State.selectedItem;
+      State.inventory = State.inventory.filter(i => i.id !== item.id);
+      State.selectedItem = null;
+
+      const lot = {
+        lotID: 'LOT-' + Math.floor(10000 + Math.random() * 90000),
+        item: item,
+        bid: Math.round(item.value * 0.5),
+        bidsCount: 1,
+        secondsLeft: 30 + Math.floor(Math.random() * 25),
+        highBidder: 'FlintHunter_77'
+      };
+
+      State.auctions.push(lot);
+      Sound.gavelBang();
+      showToast(`Listed Lot #${lot.lotID} on Live Auction Exchange!`);
+
+      updateTopBar();
+      switchTab('market');
+      switchMarketView('auctions');
+      saveGameState();
+    }
+
+    function renderActiveAuctions() {
+      const container = document.getElementById('auction-lots-grid');
+      const emptyNote = document.getElementById('auction-empty-state');
+      container.innerHTML = '';
+
+      document.getElementById('market-active-lot-count').textContent = State.auctions.length;
+
+      if (State.auctions.length === 0) {
+        emptyNote.classList.remove('hidden');
+        return;
+      } else {
+        emptyNote.classList.add('hidden');
+      }
+
+      State.auctions.forEach(lot => {
+        const card = document.createElement('div');
+        card.className = 'pixel-inset p-3 rounded flex flex-col justify-between border border-stone-800';
+
+        const top = document.createElement('div');
+        top.className = 'flex items-center gap-2.5';
+
+        const c = document.createElement('canvas');
+        c.width = 48;
+        c.height = 48;
+        c.className = 'w-12 h-12 bg-black border border-stone-800 rounded shrink-0';
+        renderPixelLithic(c, lot.item);
+
+        const info = document.createElement('div');
+        info.className = 'text-xs truncate';
+        info.innerHTML = `
+          <div class="font-bold text-amber-300 truncate">${lot.item.title}</div>
+          <div class="text-[9px] text-stone-400">${lot.item.material.name} • ${lot.item.grade}</div>
+          <div class="text-[9px] text-cyan-300 font-mono mt-0.5">Bidder: ${lot.highBidder}</div>
+        `;
+
+        top.appendChild(c);
+        top.appendChild(info);
+
+        const stats = document.createElement('div');
+        stats.className = 'bg-[#06080d] p-2 rounded border border-stone-800 flex justify-between items-center my-2 text-xs font-mono';
+        stats.innerHTML = `
+          <div>
+            <div class="text-[8px] text-stone-400">CURRENT BID</div>
+            <div class="text-emerald-400 font-bold text-sm">$${lot.bid.toLocaleString()}</div>
+          </div>
+          <div class="text-right">
+            <div class="text-[8px] text-stone-400">CLOSING</div>
+            <div class="text-amber-400 font-bold">${lot.secondsLeft}s (${lot.bidsCount} bids)</div>
+          </div>
+        `;
+
+        card.appendChild(top);
+        card.appendChild(stats);
+        container.appendChild(card);
+      });
+    }
+
+    /* Live Auction Ticker & Bidding Wars */
+    setInterval(() => {
+      let updated = false;
+      const bidders = ['AdenaCollector', 'MidwestMounds', 'SciotoRelics', 'OhioFlintGuy', 'PrairieHunter'];
+
+      for (let i = State.auctions.length - 1; i >= 0; i--) {
+        const lot = State.auctions[i];
+        lot.secondsLeft--;
+
+        if (Math.random() < 0.38 && lot.secondsLeft > 0) {
+          lot.bid += Math.round(lot.item.value * (0.05 + Math.random() * 0.15));
+          lot.bidsCount++;
+          lot.highBidder = bidders[Math.floor(Math.random() * bidders.length)];
+          updated = true;
+        }
+
+        if (lot.secondsLeft <= 0) {
+          const fee = Math.round(lot.bid * 0.08);
+          const payout = lot.bid - fee;
+          State.money += payout;
+
+          Sound.gavelBang();
+          Sound.coinRegister();
+          showToast(`Gavel Bang! Sold Lot #${lot.lotID} for $${lot.bid}!`);
+          State.auctions.splice(i, 1);
+          updated = true;
+          updateTopBar();
+          saveGameState();
+        }
+      }
+
+      if (updated && !document.getElementById('tab-market').classList.contains('hidden')) {
+        renderActiveAuctions();
+      }
+    }, 1000);
+
+    /* =========================================================================
+       GOD MODE DEVELOPER CONSOLE
+       ========================================================================= */
+    function forceCacheExcavationEvent() {
+      const count = Math.floor(Math.random() * 16) + 5; // 5 to 20 artifacts
+      openPrehistoricCacheModal(count);
+    }
+
+    function godMintG10Specimen() {
+      const relic = generateProceduralArtifact(null, null, 'G10', true);
+      if (State.inventory.length < 35) {
+        State.inventory.push(relic);
+        Sound.relicFanfare();
+        showToast(`Minted Certified G10 ${relic.title}!`);
+        updateTopBar();
+        renderInventoryGrid();
+        saveGameState();
+      } else {
+        showToast('Field Bag full!');
+      }
+    }
+
+    function godAddFunds(amt) {
+      State.money += amt;
+      Sound.coinRegister();
+      showToast(`Added +$${amt.toLocaleString()} Dev Funds!`);
+      updateTopBar();
+      saveGameState();
+    }
+
+    function godBoostTaps() {
+      State.tapsLeft += 99;
+      document.getElementById('hunt-taps-label').textContent = State.tapsLeft;
+      Sound.knapTap();
+      showToast('Added +99 Expedition Taps!');
+    }
+
+    function godForgeCustomRelic() {
+      const typeName = document.getElementById('god-input-typology').value;
+      const matId = document.getElementById('god-input-mineral').value;
+      const grade = document.getElementById('god-input-grade').value;
+      const autoCOA = document.getElementById('god-input-coa').value === 'yes';
+
+      const typeDef = MIDWEST_TYPOLOGIES.find(t => t.name === typeName) || MIDWEST_TYPOLOGIES[0];
+      const mat = MIDWEST_MINERALS.find(m => m.id === matId) || MIDWEST_MINERALS[0];
+
+      const relic = generateProceduralArtifact(typeDef, mat, grade, autoCOA);
+      if (State.inventory.length < 35) {
+        State.inventory.push(relic);
+        Sound.relicFanfare();
+        showToast(`Forged custom ${relic.title} (${grade})!`);
+        updateTopBar();
+        renderInventoryGrid();
+        saveGameState();
+      } else {
+        showToast('Field Bag is full!');
+      }
+    }
+
+    function populateGodModeSelectors() {
+      const typeSel = document.getElementById('god-input-typology');
+      typeSel.innerHTML = '';
+      MIDWEST_TYPOLOGIES.forEach(t => {
+        const o = document.createElement('option');
+        o.value = t.name;
+        o.textContent = t.name;
+        typeSel.appendChild(o);
+      });
+
+      const matSel = document.getElementById('god-input-mineral');
+      matSel.innerHTML = '';
+      MIDWEST_MINERALS.forEach(m => {
+        const o = document.createElement('option');
+        o.value = m.id;
+        o.textContent = `${m.name} (${m.origin})`;
+        matSel.appendChild(o);
+      });
+    }
+
+    function exportSaveJSON() {
+      const payload = {
+        money: State.money,
+        inventory: State.inventory,
+        shadowbox: State.shadowbox,
+        auctions: State.auctions
+      };
+      const str = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(payload, null, 2));
+      const dl = document.createElement('a');
+      dl.setAttribute('href', str);
+      dl.setAttribute('download', 'native_diggers_save.json');
+      dl.click();
+      showToast('Exported backup save JSON!');
+    }
+
+    function importSaveJSONPrompt() {
+      const json = prompt('Paste your Native Diggers JSON save data:');
+      if (json) {
+        try {
+          const parsed = JSON.parse(json);
+          State.money = parsed.money ?? 450;
+          State.inventory = parsed.inventory || [];
+          State.shadowbox = parsed.shadowbox || Array(8).fill(null);
+          State.auctions = parsed.auctions || [];
+          saveGameState();
+          updateTopBar();
+          renderInventoryGrid();
+          renderShadowboxCabinet();
+          showToast('Save file restored successfully!');
+        } catch (e) {
+          showToast('Invalid JSON file format!');
+        }
+      }
+    }
+
+    function wipeSaveGame() {
+      if (confirm('Erase all saved progress and reset Native Diggers?')) {
+        localStorage.removeItem('nativediggers_save_v1');
+        location.reload();
+      }
+    }
+
+    /* =========================================================================
+       APP NAVIGATION CONTROLLER & HUD
+       ========================================================================= */
+    const TABS = ['hunt', 'cache', 'inventory', 'grading', 'guide', 'shadowbox', 'market', 'godmode'];
+
+    function switchTab(target) {
+      TABS.forEach(t => {
+        const sec = document.getElementById(`tab-${t}`);
+        const btn = document.getElementById(`nav-btn-${t}`);
+        if (t === target) {
+          sec.classList.remove('hidden');
+          btn.classList.add('text-amber-400', 'font-bold');
+          btn.classList.remove('text-stone-400');
+        } else {
+          sec.classList.add('hidden');
+          btn.classList.remove('text-amber-400', 'font-bold');
+          btn.classList.add('text-stone-400');
+        }
+      });
+
+      if (target === 'inventory') renderInventoryGrid();
+      if (target === 'grading') populateGradingSelect();
+      if (target === 'shadowbox') renderShadowboxCabinet();
+      if (target === 'guide') renderFieldGuideCatalog();
+      if (target === 'market') populateTradeRelicDropdown();
+      if (target === 'cache') renderCacheExcavationBed();
+    }
+
+    function updateTopBar() {
+      document.getElementById('stat-money').textContent = `$${State.money.toLocaleString()}`;
+      document.getElementById('stat-bag-count').textContent = `${State.inventory.length}/35`;
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('game-toast');
+      toast.textContent = msg;
+      toast.classList.remove('opacity-0', '-translate-y-2');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', '-translate-y-2');
+      }, 3000);
+    }
+
+    /* =========================================================================
+       STARTUP LIFECYCLE
+       ========================================================================= */
+    window.addEventListener('load', () => {
+      loadGameState();
+
+      // Seed starter kit if empty
+      if (State.inventory.length === 0 && State.shadowbox.every(s => s === null)) {
+        const starter1 = generateProceduralArtifact(MIDWEST_TYPOLOGIES[0]); // Ohio Clovis
+        const starter2 = generateProceduralArtifact(MIDWEST_TYPOLOGIES[4]); // Dovetail
+        const starter3 = generateProceduralArtifact(MIDWEST_TYPOLOGIES[7]); // Adena Robbins
+        certifyRelic(starter2);
+
+        State.inventory.push(starter1, starter2, starter3);
+        State.shadowbox[0] = generateProceduralArtifact(MIDWEST_TYPOLOGIES[8], null, 'G9', true); // Hopewell Snyders
+      }
+
+      resetExpeditionGrid(false);
+      shuffleMarketDealers();
+      populateGodModeSelectors();
+      updateTopBar();
+      renderInventoryGrid();
+      renderShadowboxCabinet();
+      renderFieldGuideCatalog();
+
+      if (State.inventory.length > 0) {
+        inspectSpecimen(State.inventory[0]);
+      }
+    });
+  </script>
+</body>
+</html>
