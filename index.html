@@ -914,9 +914,10 @@
     }
 
     /* =========================================================================
-       RAW MATERIAL & MINERALOGY MATRIX (EXPANDED FLINTS, CHERTS & OBSIDIANS)
+       RAW MATERIAL & MINERALOGY MATRIX (MASSIVELY EXPANDED CONTINENTAL LITHICS)
        ========================================================================= */
     const LITHIC_MINERALS = [
+      // --- MIDWEST & OHIO BASIN ---
       {
         id: 'flintridge_gem',
         name: 'Flint Ridge Jewel Chalcedony',
@@ -1000,12 +1001,29 @@
         baseColor: [64, 67, 74],
         edgeColor: [90, 94, 102],
         flakeColor: [124, 128, 138],
-        banding: true,
+        banding: false,
+        orbicular: true,
         bandColor: [165, 160, 145],
         sheen: 0.45,
         stipple: false,
         multiplier: 2.2,
         desc: 'Nodular dark gray hornstone featuring concentric bullseye rings and chalky outer cortex.'
+      },
+      {
+        id: 'cobden',
+        name: 'Cobden Ball Bullseye Hornstone',
+        region: 'Midwest',
+        origin: 'Union Co., Southern Illinois',
+        baseColor: [44, 48, 54],
+        edgeColor: [78, 84, 94],
+        flakeColor: [112, 118, 130],
+        banding: false,
+        orbicular: true,
+        bandColor: [188, 182, 168],
+        sheen: 0.5,
+        stipple: false,
+        multiplier: 2.4,
+        desc: 'Spheroidal nodular hornstone with dramatic swirling concentric orbicular rings.'
       },
       {
         id: 'burlington',
@@ -1015,7 +1033,7 @@
         baseColor: [214, 204, 200],
         edgeColor: [236, 222, 220],
         flakeColor: [252, 240, 240],
-        sheen: 0.4,
+        sheen: 0.45,
         banding: false,
         bandColor: null,
         stipple: false,
@@ -1038,34 +1056,19 @@
         desc: 'Angular brecciated chert showing healed fractures and distinctive gray-tan mottling.'
       },
       {
-        id: 'arkansas_novaculite',
-        name: 'Arkansas Pearl Novaculite',
+        id: 'hixton',
+        name: 'Hixton Orthoquartzite',
         region: 'Midwest',
-        origin: 'Ouachita Mountains, AR',
-        baseColor: [230, 230, 228],
-        edgeColor: [244, 244, 242],
-        flakeColor: [255, 255, 255],
+        origin: 'Silver Mound, Jackson Co., WI',
+        baseColor: [196, 186, 166],
+        edgeColor: [222, 212, 192],
+        flakeColor: [246, 242, 228],
+        sheen: 0.4,
         banding: false,
         bandColor: null,
-        sheen: 0.65,
-        stipple: false,
+        stipple: true,
         multiplier: 2.5,
-        desc: 'Microcrystalline quartz novaculite with translucent waxy luster and razor-sharp edge holding.'
-      },
-      {
-        id: 'alibates',
-        name: 'Alibates Agatized Dolomite',
-        region: 'West',
-        origin: 'Canadian River & Texas Panhandle',
-        baseColor: [144, 58, 76],
-        edgeColor: [174, 84, 102],
-        flakeColor: [210, 130, 150],
-        banding: true,
-        bandColor: [222, 196, 138],
-        sheen: 0.65,
-        stipple: false,
-        multiplier: 2.7,
-        desc: 'Variegated silicified dolomite displaying vivid maroon, cream, and sky-blue ribbon bands.'
+        desc: 'Sparkling sugary silicified sandstone quarried for over 10,000 years in Wisconsin.'
       },
       {
         id: 'kniferiver',
@@ -1080,22 +1083,268 @@
         sheen: 0.85,
         stipple: false,
         multiplier: 2.8,
-        desc: 'Translucent root-beer amber silicified lignite prized across ancient trade routes.'
+        desc: 'Translucent root-beer amber silicified lignite prized across ancient continental trade routes.'
       },
       {
-        id: 'hixton',
-        name: 'Hixton Orthoquartzite',
+        id: 'kaolin_chert',
+        name: 'Southern Illinois Kaolin Chert',
         region: 'Midwest',
-        origin: 'Silver Mound, Jackson Co., WI',
-        baseColor: [196, 186, 166],
-        edgeColor: [222, 212, 192],
-        flakeColor: [246, 242, 228],
+        origin: 'Union Co., Southern Illinois',
+        baseColor: [220, 212, 188],
+        edgeColor: [238, 230, 210],
+        flakeColor: [252, 246, 232],
+        banding: true,
+        bandColor: [186, 170, 138],
+        sheen: 0.55,
+        stipple: false,
+        multiplier: 2.4,
+        desc: 'Translucent wax-like chert from Iron Mountain, highly prized for Mississippian ceremonial spades and blades.'
+      },
+      {
+        id: 'mill_creek',
+        name: 'Mill Creek Fossiliferous Chert',
+        region: 'Midwest',
+        origin: 'Alexander & Union Co., IL',
+        baseColor: [176, 160, 140],
+        edgeColor: [204, 188, 168],
+        flakeColor: [224, 212, 196],
+        banding: false,
+        bandColor: null,
+        sheen: 0.35,
+        stipple: true,
+        multiplier: 1.8,
+        desc: 'Coarse buff, tan and gray fossiliferous chert struck into large Mississippian hoes, spades, and swords.'
+      },
+      {
+        id: 'mozarkite',
+        name: 'Mozarkite Variegated Chert',
+        region: 'Midwest',
+        origin: 'Benton Co., Missouri Ozarks',
+        baseColor: [178, 108, 128],
+        edgeColor: [208, 142, 160],
+        flakeColor: [236, 178, 196],
+        banding: true,
+        bandColor: [214, 182, 120],
+        sheen: 0.65,
+        stipple: false,
+        multiplier: 2.5,
+        desc: 'Vivid pink, purple, and cream porcelain-like banded chert unique to the Missouri Ozarks.'
+      },
+      {
+        id: 'carter_cave',
+        name: 'Carter Cave Butterscotch Chert',
+        region: 'Midwest',
+        origin: 'Carter Co., Kentucky Limestone Cliffs',
+        baseColor: [198, 138, 54],
+        edgeColor: [228, 168, 84],
+        flakeColor: [248, 198, 120],
+        banding: true,
+        bandColor: [148, 92, 34],
+        sheen: 0.5,
+        stipple: false,
+        multiplier: 2.2,
+        desc: 'Vibrant golden butterscotch to orange-tan Mississippian-age chert with fossil crinoid stems.'
+      },
+
+      // --- MID-SOUTH & SOUTHEAST ---
+      {
+        id: 'dover',
+        name: 'Tennessee Dover Mottled Chert',
+        region: 'Southeast',
+        origin: 'Stewart Co., Dover, TN Quarries',
+        baseColor: [126, 92, 60],
+        edgeColor: [162, 124, 88],
+        flakeColor: [194, 158, 122],
+        banding: true,
+        bandColor: [198, 178, 152],
+        sheen: 0.45,
+        stipple: true,
+        multiplier: 2.3,
+        desc: 'Chocolate to olive-brown mottled chert with light tan cloudy inclusions, used for ceremonial swords.'
+      },
+      {
+        id: 'fort_payne',
+        name: 'Fort Payne Banded Chert',
+        region: 'Southeast',
+        origin: 'Tennessee & Alabama River Drainages',
+        baseColor: [58, 62, 68],
+        edgeColor: [88, 94, 102],
+        flakeColor: [120, 126, 136],
+        banding: true,
+        bandColor: [136, 130, 118],
         sheen: 0.4,
+        stipple: true,
+        multiplier: 1.9,
+        desc: 'Dense, dark blue-gray to charcoal banded chert occurring in tabular beds with heavy fossils.'
+      },
+      {
+        id: 'duck_river_stone',
+        name: 'Duck River Olive Hornstone',
+        region: 'Southeast',
+        origin: 'Humphreys & Perry Co., TN',
+        baseColor: [88, 86, 68],
+        edgeColor: [122, 120, 98],
+        flakeColor: [156, 154, 130],
+        banding: true,
+        bandColor: [168, 156, 124],
+        sheen: 0.5,
+        stipple: false,
+        multiplier: 2.4,
+        desc: 'Subtle olive-drab cryptocrystalline nodular chert famous for mammoth Mississippian ceremonial caches.'
+      },
+      {
+        id: 'tallahatta',
+        name: 'Tallahatta Green Sandstone Quartzite',
+        region: 'Southeast',
+        origin: 'Clarke & Choctaw Co., AL',
+        baseColor: [164, 178, 154],
+        edgeColor: [192, 204, 182],
+        flakeColor: [218, 228, 210],
+        sheen: 0.35,
         banding: false,
         bandColor: null,
         stipple: true,
+        multiplier: 2.2,
+        desc: 'Coarse, translucent pale greenish-gray silicified sandstone quarried across the coastal plain.'
+      },
+      {
+        id: 'tampa_coral',
+        name: 'Tampa Bay Agatized Fossil Coral',
+        region: 'Southeast',
+        origin: 'Hillsborough & Suwannee Basins, FL',
+        baseColor: [194, 118, 84],
+        edgeColor: [224, 154, 118],
+        flakeColor: [248, 192, 160],
+        banding: true,
+        bandColor: [228, 186, 118],
+        sheen: 0.75,
+        stipple: true,
+        multiplier: 2.8,
+        desc: 'Translucent agatized coral pseudomorph with vivid caramel, amber-honey, and coral-pink flower chambers.'
+      },
+      {
+        id: 'suwannee_chert_mat',
+        name: 'Suwannee River Waxy Chert',
+        region: 'Southeast',
+        origin: 'Columbia & Suwannee Co., FL',
+        baseColor: [222, 214, 192],
+        edgeColor: [242, 234, 216],
+        flakeColor: [255, 248, 234],
+        banding: true,
+        bandColor: [210, 168, 154],
+        sheen: 0.6,
+        stipple: false,
+        multiplier: 2.2,
+        desc: 'Waxy cream, buff, and blush-pink fossiliferous chert dredged from Florida spring runs and limestone river beds.'
+      },
+      {
+        id: 'arkansas_novaculite',
+        name: 'Arkansas Pearl Novaculite',
+        region: 'Southeast',
+        origin: 'Ouachita Mountains, AR',
+        baseColor: [230, 230, 228],
+        edgeColor: [244, 244, 242],
+        flakeColor: [255, 255, 255],
+        banding: false,
+        bandColor: null,
+        sheen: 0.65,
+        stipple: false,
         multiplier: 2.5,
-        desc: 'Sparkling sugary silicified sandstone quarried for over 10,000 years in Wisconsin.'
+        desc: 'Microcrystalline quartz novaculite with translucent waxy luster and razor-sharp edge holding.'
+      },
+
+      // --- NORTHEAST & APPALACHIANS ---
+      {
+        id: 'onondaga',
+        name: 'New York Onondaga Mottled Chert',
+        region: 'Northeast',
+        origin: 'Western NY & Lake Erie Escarpment',
+        baseColor: [48, 52, 58],
+        edgeColor: [76, 82, 90],
+        flakeColor: [108, 114, 124],
+        banding: true,
+        bandColor: [134, 138, 144],
+        sheen: 0.45,
+        stipple: true,
+        multiplier: 2.1,
+        desc: 'Dense, mottled blue-gray to dark charcoal chert containing crinoid fossils and quartz seams.'
+      },
+      {
+        id: 'normanskill',
+        name: 'Normanskill Green / Olive Chert',
+        region: 'Northeast',
+        origin: 'Hudson Valley & Greene Co., NY',
+        baseColor: [72, 92, 74],
+        edgeColor: [102, 124, 104],
+        flakeColor: [134, 156, 136],
+        banding: true,
+        bandColor: [50, 64, 52],
+        sheen: 0.4,
+        stipple: false,
+        multiplier: 2.2,
+        desc: 'Distinctive sage to deep olive-green bedded radiolarian chert prized by Northeast Archaic and Woodland hunters.'
+      },
+      {
+        id: 'munsungan',
+        name: 'Munsungan Lake Crimson Chert',
+        region: 'Northeast',
+        origin: 'Piscataquis Co., North Maine Woods',
+        baseColor: [142, 38, 48],
+        edgeColor: [178, 62, 74],
+        flakeColor: [214, 98, 110],
+        banding: true,
+        bandColor: [96, 24, 32],
+        sheen: 0.55,
+        stipple: false,
+        multiplier: 2.6,
+        desc: 'Lustrous, deep burgundy and scarlet radiolarian jasper flaked by Paleo-Indian caribou hunters.'
+      },
+      {
+        id: 'penn_jasper',
+        name: 'Pennsylvania Brown / Golden Jasper',
+        region: 'Northeast',
+        origin: 'Lehigh & Bucks Co., PA Quarry Pits',
+        baseColor: [168, 112, 44],
+        edgeColor: [198, 142, 68],
+        flakeColor: [228, 174, 98],
+        banding: true,
+        bandColor: [118, 68, 24],
+        sheen: 0.45,
+        stipple: false,
+        multiplier: 2.3,
+        desc: 'Rich caramel and golden jasper mined by Paleo and Archaic hunters for spearheads.'
+      },
+      {
+        id: 'kanawha_black',
+        name: 'Kanawha Black Silicious Flint',
+        region: 'Northeast',
+        origin: 'Kanawha Valley, West Virginia',
+        baseColor: [24, 26, 30],
+        edgeColor: [48, 52, 60],
+        flakeColor: [78, 84, 96],
+        banding: false,
+        bandColor: null,
+        sheen: 0.45,
+        stipple: true,
+        multiplier: 1.9,
+        desc: 'Tough, vitreous coal-black silicious flint quarried from mountain ridgetops in West Virginia.'
+      },
+
+      // --- PLAINS & TEXAS ---
+      {
+        id: 'alibates',
+        name: 'Alibates Agatized Dolomite',
+        region: 'West',
+        origin: 'Canadian River & Texas Panhandle',
+        baseColor: [144, 58, 76],
+        edgeColor: [174, 84, 102],
+        flakeColor: [210, 130, 150],
+        banding: true,
+        bandColor: [222, 196, 138],
+        sheen: 0.65,
+        stipple: false,
+        multiplier: 2.7,
+        desc: 'Variegated silicified dolomite displaying vivid maroon, cream, and sky-blue ribbon bands.'
       },
       {
         id: 'edwards_butter',
@@ -1113,51 +1362,37 @@
         desc: 'Smooth butter-yellow to honey cryptocrystalline chert struck into large bifaces.'
       },
       {
-        id: 'penn_jasper',
-        name: 'Pennsylvania Brown / Golden Jasper',
-        region: 'Midwest',
-        origin: 'Lehigh & Bucks Co., PA Quarry Pits',
-        baseColor: [168, 112, 44],
-        edgeColor: [198, 142, 68],
-        flakeColor: [228, 174, 98],
+        id: 'georgetown_flint',
+        name: 'Georgetown Steely-Blue Flint',
+        region: 'West',
+        origin: 'Williamson Co., Central Texas',
+        baseColor: [62, 70, 82],
+        edgeColor: [90, 102, 118],
+        flakeColor: [126, 140, 158],
         banding: true,
-        bandColor: [118, 68, 24],
-        sheen: 0.45,
-        stipple: false,
-        multiplier: 2.3,
-        desc: 'Rich caramel and golden jasper mined by Paleo and Archaic hunters for spearheads.'
-      },
-      {
-        id: 'kaolin_chert',
-        name: 'Southern Illinois Kaolin Chert',
-        region: 'Midwest',
-        origin: 'Union Co., Southern Illinois',
-        baseColor: [220, 212, 188],
-        edgeColor: [238, 230, 210],
-        flakeColor: [252, 246, 232],
+        bandColor: [168, 176, 186],
         sheen: 0.6,
-        banding: true,
-        bandColor: [186, 170, 138],
-        sheen: 0.55,
         stipple: false,
         multiplier: 2.4,
-        desc: 'Translucent wax-like chert from Iron Mountain, highly prized for Mississippian spades and blades.'
+        desc: 'Vitreous, steely blue-gray cryptocrystalline flint found in nodules with thick white chalk rind.'
       },
       {
-        id: 'mozarkite',
-        name: 'Mozarkite Variegated Chert',
-        region: 'Midwest',
-        origin: 'Benton Co., Missouri Ozarks',
-        baseColor: [178, 108, 128],
-        edgeColor: [208, 142, 160],
-        flakeColor: [236, 178, 196],
+        id: 'kay_county',
+        name: 'Kay County Heated Pink Chert',
+        region: 'West',
+        origin: 'Kay Co., OK & Florence, KS',
+        baseColor: [208, 132, 122],
+        edgeColor: [232, 164, 154],
+        flakeColor: [250, 196, 188],
         banding: true,
-        bandColor: [214, 182, 120],
-        sheen: 0.65,
-        stipple: false,
-        multiplier: 2.5,
-        desc: 'Vivid pink, purple, and cream porcelain-like banded chert unique to the Missouri Ozarks.'
+        bandColor: [218, 182, 118],
+        sheen: 0.55,
+        stipple: true,
+        multiplier: 2.2,
+        desc: 'Permian limestone chert showing fusulinid fossils, heat-altered to glossy strawberry pink and cream.'
       },
+
+      // --- WEST, GREAT BASIN & PACIFIC NORTHWEST ---
       {
         id: 'mahogany_obsidian',
         name: 'Mahogany Swirl Obsidian',
@@ -1184,7 +1419,7 @@
         banding: false,
         bandColor: null,
         sheen: 0.9,
-        stipple: true, // Cristobalite spherulite snowflake inclusions
+        stipple: true,
         multiplier: 2.6,
         desc: 'Deep jet volcanic glass containing white snowflake spherulites of cristobalite.'
       },
@@ -1204,6 +1439,81 @@
         desc: 'Lustrous black obsidian displaying iridescent green, bronze, and purple optical sheen.'
       },
       {
+        id: 'gold_sheen_obsidian',
+        name: 'Oregon Gold Sheen Obsidian',
+        region: 'West',
+        origin: 'Glass Buttes, High Desert, OR',
+        baseColor: [24, 20, 14],
+        edgeColor: [58, 48, 32],
+        flakeColor: [96, 82, 54],
+        banding: true,
+        bandColor: [204, 168, 84],
+        sheen: 1.0,
+        stipple: false,
+        multiplier: 3.0,
+        desc: 'Pitch black volcanic glass infused with microscopic gas bubble alignments creating golden sheen.'
+      },
+      {
+        id: 'green_burns_obsidian',
+        name: 'Burns Translucent Green Obsidian',
+        region: 'West',
+        origin: 'Harney Co., Burns, OR',
+        baseColor: [28, 46, 32],
+        edgeColor: [48, 78, 54],
+        flakeColor: [76, 118, 86],
+        banding: false,
+        bandColor: null,
+        sheen: 0.95,
+        stipple: false,
+        multiplier: 2.8,
+        desc: 'Extraordinary bottle-green translucent volcanic glass found exclusively near Burns, Oregon.'
+      },
+      {
+        id: 'columbia_dacite',
+        name: 'Columbia Plateau Fine Dacite',
+        region: 'West',
+        origin: 'Cascade Range & Columbia River Basins',
+        baseColor: [34, 35, 38],
+        edgeColor: [54, 56, 62],
+        flakeColor: [78, 82, 90],
+        banding: false,
+        bandColor: null,
+        sheen: 0.35,
+        stipple: true,
+        multiplier: 1.9,
+        desc: 'Velvety, fine-grained volcanic dacite flaked into durable lanceolate spearheads.'
+      },
+      {
+        id: 'morrison_agate',
+        name: 'Morrison Petrified Agate Wood',
+        region: 'West',
+        origin: 'San Rafael Swell & Four Corners',
+        baseColor: [186, 94, 46],
+        edgeColor: [216, 128, 74],
+        flakeColor: [242, 168, 112],
+        banding: true,
+        bandColor: [118, 44, 24],
+        sheen: 0.65,
+        stipple: false,
+        multiplier: 2.7,
+        desc: 'Agatized Jurassic wood displaying concentric tree growth rings in fiery orange, maroon, and ochre.'
+      },
+      {
+        id: 'franciscan_chert',
+        name: 'California Franciscan Red Jasper',
+        region: 'West',
+        origin: 'Coast Ranges & San Francisco Bay',
+        baseColor: [156, 44, 42],
+        edgeColor: [188, 68, 66],
+        flakeColor: [220, 102, 100],
+        banding: true,
+        bandColor: [224, 218, 204],
+        sheen: 0.5,
+        stipple: false,
+        multiplier: 2.3,
+        desc: 'Deep brick-red radiolarian chert interwoven with tiny white quartz veins and fracture lines.'
+      },
+      {
         id: 'black_basalt',
         name: 'Black Mountain Fine Basalt',
         region: 'West',
@@ -1219,9 +1529,8 @@
         desc: 'Dense, fine-grained volcanic basalt flaked into durable Great Basin projectile points.'
       }
     ];
-
-    /* =========================================================================
-       SPECIMEN CATALOG: 100% PURE LITHICS (POINTS, SPEARS, BLADES & DRILLS)
+/* =========================================================================
+       SPECIMEN CATALOG: 100% PURE LITHICS (55+ DISTINCT POINTS, BLADES & TOOLS)
        ========================================================================= */
     const LITHIC_TYPOLOGIES = [
       // --- PALEO-INDIAN (POINTS & SPEARS) ---
@@ -1238,6 +1547,20 @@
         diagnostics: 'Deep central fluting channels on both faces, concave base, heavy basal grinding.',
         allowedMats: ['uppermercer', 'flintridge_gem', 'kniferiver', 'wyandotte', 'hixton'],
         desc: 'Masterwork fluted spearpoint engineered for late Pleistocene megafauna hunting.'
+      },
+      {
+        id: 'type_clovis_ross',
+        name: 'Ross County Clovis Fluted Point',
+        category: 'spear',
+        shape: 'ross_county',
+        region: 'Midwest',
+        era: 'Paleo-Indian (12,800 - 10,500 BCE)',
+        baseLen: 4.4,
+        baseVal: 680,
+        distribution: 'Scioto River Basin & Ross County Terrace Knolls',
+        diagnostics: 'Broad blade with recurved lateral waist, wide flute, and heavy ground ears.',
+        allowedMats: ['uppermercer', 'flintridge_gem', 'zaleski', 'delaware'],
+        desc: 'Distinctive Ohio Paleo-Indian fluted lance with expanded midsection and delicate basal ears.'
       },
       {
         id: 'type_folsom',
@@ -1266,6 +1589,48 @@
         diagnostics: 'Recurvate narrow waist, fluted full length of blade, prominent out-flaring ears.',
         allowedMats: ['uppermercer', 'flintridge_gem', 'wyandotte', 'zaleski', 'penn_jasper'],
         desc: 'Slender, fish-tailed Paleo masterwork featuring dramatic full-length fluting scars.'
+      },
+      {
+        id: 'type_redstone',
+        name: 'Redstone Triangular Fluted Point',
+        category: 'spear',
+        shape: 'redstone',
+        region: 'Southeast',
+        era: 'Paleo-Indian (11,500 - 9,500 BCE)',
+        baseLen: 3.9,
+        baseVal: 690,
+        distribution: 'Tennessee & Cumberland River Valleys',
+        diagnostics: 'Convex triangular outline with deep parabolic basal concavity and multiple flutes.',
+        allowedMats: ['fort_payne', 'dover', 'tampa_coral', 'duck_river_stone'],
+        desc: 'Triangular Paleo-Indian fluted lance unique to the southeastern river systems.'
+      },
+      {
+        id: 'type_simpson',
+        name: 'Simpson Waist-Constricted Point',
+        category: 'spear',
+        shape: 'simpson',
+        region: 'Southeast',
+        era: 'Paleo-Indian (11,000 - 9,000 BCE)',
+        baseLen: 3.6,
+        baseVal: 660,
+        distribution: 'North Florida Spring Basins & Suwannee River',
+        diagnostics: 'Pronounced recurvate waist constriction, flaring basal ears, and basal thinning.',
+        allowedMats: ['suwannee_chert_mat', 'tampa_coral', 'tallahatta'],
+        desc: 'Classic Southeastern Paleo spearhead recovered from limestone river dives.'
+      },
+      {
+        id: 'type_suwannee_pt',
+        name: 'Suwannee Lanceolate Spear',
+        category: 'spear',
+        shape: 'suwannee',
+        region: 'Southeast',
+        era: 'Late Paleo / Early Archaic (10,500 - 8,500 BCE)',
+        baseLen: 4.3,
+        baseVal: 640,
+        distribution: 'Florida Spring Runs & Coastal Plain Terraces',
+        diagnostics: 'Broad lanceolate blade, slight waist constriction, concave base, heavy lateral smoothing.',
+        allowedMats: ['suwannee_chert_mat', 'tampa_coral', 'tallahatta'],
+        desc: 'Heavy, broad Paleo lanceolate associated with Pleistocene megafauna kill sites.'
       },
       {
         id: 'type_agate_basin',
@@ -1323,8 +1688,36 @@
         allowedMats: ['burlington', 'kniferiver', 'hixton', 'alibates'],
         desc: 'Famous for exceptional ribbon-like diagonal collateral pressure flaking.'
       },
+      {
+        id: 'type_scottsbluff',
+        name: 'Scottsbluff / Eden Lanceolate',
+        category: 'spear',
+        shape: 'scottsbluff',
+        region: 'Midwest',
+        era: 'Late Paleo / Early Archaic (8,500 - 6,500 BCE)',
+        baseLen: 4.2,
+        baseVal: 590,
+        distribution: 'Upper Midwest Prairies & Driftless Ridges',
+        diagnostics: 'Parallel collateral pressure flaking, squared stem with ground margins.',
+        allowedMats: ['hixton', 'kniferiver', 'burlington', 'cobden'],
+        desc: 'Sublime Cody Complex lance point displaying parallel pressure flaking scars.'
+      },
+      {
+        id: 'type_eden_needle',
+        name: 'Eden Ultra-Slender Lanceolate',
+        category: 'spear',
+        shape: 'eden',
+        region: 'West',
+        era: 'Late Paleo-Indian (9,000 - 7,000 BCE)',
+        baseLen: 4.8,
+        baseVal: 670,
+        distribution: 'Plains-High Desert Bench Terraces',
+        diagnostics: 'Pencil-slender width, pronounced median ridge diamond cross section, collateral flaking.',
+        allowedMats: ['kniferiver', 'morrison_agate', 'hixton', 'georgetown_flint'],
+        desc: 'Incredible needle-slender lance point exhibiting high diamond dorsal knapping.'
+      },
 
-      // --- ARCHAIC PERIOD (POINTS, BLADES & DRILLS) ---
+      // --- ARCHAIC PERIOD (POINTS, BLADES & TOOLS) ---
       {
         id: 'type_dovetail',
         name: 'St. Charles Dovetail Blade',
@@ -1350,7 +1743,7 @@
         baseVal: 410,
         distribution: 'Ohio, Indiana & Illinois Till Plains',
         diagnostics: 'Square diagonal E-shaped deep hafting notches, beveled edge resharpening.',
-        allowedMats: ['flintridge_gem', 'wyandotte', 'uppermercer', 'zaleski', 'delaware', 'pipe_creek'],
+        allowedMats: ['flintridge_gem', 'wyandotte', 'uppermercer', 'zaleski', 'delaware', 'cobden'],
         desc: 'Classic Early Archaic knife designed with specialized deep squared hafting cuts.'
       },
       {
@@ -1363,9 +1756,23 @@
         baseLen: 4.1,
         baseVal: 460,
         distribution: 'Scioto & Ohio River Bluffs, Heartland Trails',
-        diagnostics: 'Slender lanceolate blade with razor-sharp, fine 1-pixel micro-denticulation.',
-        allowedMats: ['flintridge_gem', 'uppermercer', 'wyandotte', 'zaleski', 'pipe_creek', 'penn_jasper'],
+        diagnostics: 'Slender lanceolate blade with razor-sharp, fine micro-denticulation.',
+        allowedMats: ['flintridge_gem', 'uppermercer', 'wyandotte', 'zaleski', 'pipe_creek', 'carter_cave'],
         desc: 'Slender hunting blade finished with uniform micro-serrated cutting teeth.'
+      },
+      {
+        id: 'type_kirk_stemmed',
+        name: 'Kirk Square-Stemmed Point',
+        category: 'point',
+        shape: 'kirk_stemmed',
+        region: 'Southeast',
+        era: 'Early Archaic (7,500 - 6,000 BCE)',
+        baseLen: 3.6,
+        baseVal: 390,
+        distribution: 'Appalachian Slopes & Piedmont Terraces',
+        diagnostics: 'Broad triangular blade, serrated margins, prominent right-angle square stem.',
+        allowedMats: ['fort_payne', 'penn_jasper', 'dover', 'tallahatta'],
+        desc: 'Substantial Archaic dart point with pronounced square stem and serrations.'
       },
       {
         id: 'type_kirk_corner',
@@ -1396,6 +1803,20 @@
         desc: 'Versatile hunting point and resharpenable butcher knife with beveled edges.'
       },
       {
+        id: 'type_greenbrier',
+        name: 'Dalton Greenbrier Auriculate Knife',
+        category: 'blade',
+        shape: 'greenbrier',
+        region: 'Southeast',
+        era: 'Early Archaic (8,500 - 7,000 BCE)',
+        baseLen: 3.8,
+        baseVal: 490,
+        distribution: 'Tennessee & Cumberland Drainages',
+        diagnostics: 'Wide triangular beveled blade, micro-serrated edges, dramatically flaring auriculate base.',
+        allowedMats: ['fort_payne', 'dover', 'suwannee_chert_mat', 'tallahatta'],
+        desc: 'Heavily resharpened Dalton variant sporting dramatic out-turned basal ear lobes.'
+      },
+      {
         id: 'type_lost_lake',
         name: 'Lost Lake Deep Corner-Notch',
         category: 'point',
@@ -1406,7 +1827,7 @@
         baseVal: 480,
         distribution: 'Ohio & Wabash Valleys, Tennessee Basin',
         diagnostics: 'Extremely deep, narrow upward-angled corner notches producing huge drooping barbs.',
-        allowedMats: ['flintridge_gem', 'wyandotte', 'burlington', 'uppermercer', 'arkansas_novaculite'],
+        allowedMats: ['flintridge_gem', 'wyandotte', 'burlington', 'uppermercer', 'fort_payne'],
         desc: 'Incredible flintknapping feat featuring dramatic barbed shoulder projections.'
       },
       {
@@ -1422,6 +1843,20 @@
         diagnostics: 'Long parallel vertical slits driven deep from base, creating thin delicate barbs.',
         allowedMats: ['burlington', 'keokuk_chert', 'arkansas_novaculite', 'alibates'],
         desc: 'High-wire flintknapping triumph requiring immense punching force to notch without snapping.'
+      },
+      {
+        id: 'type_eva_basal',
+        name: 'Eva Deep Basal-Notched Dart',
+        category: 'point',
+        shape: 'eva',
+        region: 'Southeast',
+        era: 'Middle Archaic (6,000 - 4,000 BCE)',
+        baseLen: 3.5,
+        baseVal: 510,
+        distribution: 'Tennessee River Lowland Terraces',
+        diagnostics: 'Broad triangular blade with vertical slits punched into base forming stubby barbs.',
+        allowedMats: ['fort_payne', 'dover', 'duck_river_stone'],
+        desc: 'Classic mid-south Archaic atlatl point struck from tabular river cherts.'
       },
       {
         id: 'type_hardin_barbed',
@@ -1452,18 +1887,88 @@
         desc: 'Heavy dart point and hafted knife recovered from ancient rockshelter floor strata.'
       },
       {
-        id: 'type_decatur',
-        name: 'Decatur Fractured-Base Knife',
-        category: 'blade',
-        shape: 'decatur',
+        id: 'type_oxbow',
+        name: 'Oxbow Scooped-Base Point',
+        category: 'point',
+        shape: 'oxbow',
         region: 'Midwest',
-        era: 'Early Archaic (7,500 - 6,000 BCE)',
+        era: 'Middle Archaic (4,500 - 3,000 BCE)',
+        baseLen: 2.8,
+        baseVal: 380,
+        distribution: 'Northern Plains & Midwest Prairie Margins',
+        diagnostics: 'Broad shallow side notches, deep rounded parabolic basal concavity.',
+        allowedMats: ['kniferiver', 'hixton', 'burlington'],
+        desc: 'Bison hunting projectile point featuring wide scooped notched hafting ears.'
+      },
+      {
+        id: 'type_stanly',
+        name: 'Stanly Small-Notched Point',
+        category: 'point',
+        shape: 'stanly',
+        region: 'Southeast',
+        era: 'Middle Archaic (6,000 - 5,000 BCE)',
+        baseLen: 3.1,
+        baseVal: 370,
+        distribution: 'Piedmont Valleys & Blue Ridge Terraces',
+        diagnostics: 'Broad triangular blade with small, neat bifurcated notched stem.',
+        allowedMats: ['fort_payne', 'tallahatta', 'penn_jasper'],
+        desc: 'Triangular point with a distinctive notched stem belonging to the bifurcated tradition.'
+      },
+      {
+        id: 'type_lecroy',
+        name: 'LeCroy Swallowtail Bifurcated Point',
+        category: 'point',
+        shape: 'lecroy',
+        region: 'Midwest',
+        era: 'Early Archaic (6,500 - 5,500 BCE)',
+        baseLen: 2.2,
+        baseVal: 430,
+        distribution: 'Ohio River Basin & Appalachian Valleys',
+        diagnostics: 'Miniature point with deeply notched swallow-tail base and serrated blade edges.',
+        allowedMats: ['uppermercer', 'flintridge_gem', 'wyandotte', 'kanawha_black'],
+        desc: 'Delicate, deeply notched bifurcated dart point showcasing tremendous micro-flaking.'
+      },
+      {
+        id: 'type_maccorkle',
+        name: 'MacCorkle Lobed-Stem Point',
+        category: 'point',
+        shape: 'maccorkle',
+        region: 'Midwest',
+        era: 'Early Archaic (7,000 - 6,000 BCE)',
+        baseLen: 3.4,
+        baseVal: 400,
+        distribution: 'Kanawha & Ohio River Valleys',
+        diagnostics: 'Serrated triangular blade with prominent rounded, lobed bifurcated ears.',
+        allowedMats: ['kanawha_black', 'uppermercer', 'flintridge_gem'],
+        desc: 'Early Archaic hunting point with wide expanded lobed basal tangs.'
+      },
+      {
+        id: 'type_bolen_bevel',
+        name: 'Bolen Beveled Side-Notched Point',
+        category: 'point',
+        shape: 'bolen',
+        region: 'Southeast',
+        era: 'Early Archaic (8,000 - 6,500 BCE)',
         baseLen: 3.2,
-        baseVal: 440,
-        distribution: 'Ohio River Valley & Confluences',
-        diagnostics: 'Distinctive burin-like fracture blows struck deliberately into corners of the haft.',
-        allowedMats: ['uppermercer', 'flintridge_gem', 'wyandotte', 'zaleski'],
-        desc: 'Engineered with deliberate fractured burin facets on the base to seat tight in hafting wood.'
+        baseVal: 420,
+        distribution: 'Santa Fe & Suwannee River Basins, FL',
+        diagnostics: 'Deep horizontal side notches, straight ground base, steep alternate bevel resharpening.',
+        allowedMats: ['suwannee_chert_mat', 'tampa_coral', 'tallahatta'],
+        desc: 'Florida Early Archaic index artifact, repeatedly resharpened to steep beveled edges.'
+      },
+      {
+        id: 'type_benton_stem',
+        name: 'Benton Beveled Stemmed Blade',
+        category: 'blade',
+        shape: 'benton',
+        region: 'Southeast',
+        era: 'Middle Archaic (4,500 - 3,000 BCE)',
+        baseLen: 4.4,
+        baseVal: 450,
+        distribution: 'Tennessee River Benches & Mid-South Bluffs',
+        diagnostics: 'Broad lance blade with angular beveled shoulders and broad rectangular stem.',
+        allowedMats: ['fort_payne', 'dover', 'duck_river_stone'],
+        desc: 'Broad-stemmed butchering knife highly prized in Archaic shell mound deposits.'
       },
       {
         id: 'type_turkey_tail',
@@ -1476,25 +1981,11 @@
         baseVal: 540,
         distribution: 'Ohio & Wabash River Valleys',
         diagnostics: 'Bi-pointed leaf silhouette, delicate side notches near pointed base.',
-        allowedMats: ['wyandotte', 'uppermercer', 'zaleski'],
+        allowedMats: ['wyandotte', 'cobden', 'uppermercer', 'zaleski'],
         desc: 'Ceremonial bipointed cache blade struck from nodular Harrison County hornstone.'
       },
-      {
-        id: 'type_scottsbluff',
-        name: 'Scottsbluff / Eden Lanceolate',
-        category: 'spear',
-        shape: 'scottsbluff',
-        region: 'Midwest',
-        era: 'Late Paleo / Early Archaic (8,500 - 6,500 BCE)',
-        baseLen: 4.2,
-        baseVal: 590,
-        distribution: 'Upper Midwest Prairies & Driftless Ridges',
-        diagnostics: 'Parallel collateral pressure flaking, squared stem with ground margins.',
-        allowedMats: ['hixton', 'kniferiver', 'burlington'],
-        desc: 'Sublime Cody Complex lance point displaying parallel pressure flaking scars.'
-      },
 
-      // --- WOODLAND & MISSISSIPPIAN (POINTS, BLADES & SCRAPERS) ---
+      // --- WOODLAND & MISSISSIPPIAN (POINTS, BLADES & CACHE SWORDS) ---
       {
         id: 'type_adena_robbins',
         name: 'Adena Robbins Cache Blade',
@@ -1508,20 +1999,6 @@
         diagnostics: 'Broad ovate leaf silhouette, clean contracting squared stem, percussion thinning.',
         allowedMats: ['flintridge_gem', 'uppermercer', 'wyandotte', 'burlington'],
         desc: 'Ceremonial Adena knife blade frequently interred in sacred mound caches.'
-      },
-      {
-        id: 'type_adena_dickson',
-        name: 'Adena Dickson Contracting-Stem',
-        category: 'point',
-        shape: 'adena_dickson',
-        region: 'Midwest',
-        era: 'Early Woodland (800 - 200 BCE)',
-        baseLen: 4.2,
-        baseVal: 360,
-        distribution: 'Ohio & Central Mississippi Drainages',
-        diagnostics: 'Triangular blade with straight to convex edges; long contracting triangular stem.',
-        allowedMats: ['burlington', 'flintridge_gem', 'wyandotte', 'uppermercer', 'kaolin_chert'],
-        desc: 'Prominent Early Woodland spearpoint with distinctive tapering stem.'
       },
       {
         id: 'type_hopewell_snyders',
@@ -1542,14 +2019,70 @@
         name: 'Copena Triangular Spike Blade',
         category: 'blade',
         shape: 'copena',
-        region: 'Midwest',
+        region: 'Southeast',
         era: 'Middle Woodland (100 - 500 CE)',
         baseLen: 4.6,
         baseVal: 430,
         distribution: 'Ohio Valley & Tennessee Drainage Trade',
         diagnostics: 'Exaggerated recurvate blade with incurvate lower waist and straight base.',
-        allowedMats: ['uppermercer', 'wyandotte', 'burlington', 'zaleski'],
+        allowedMats: ['uppermercer', 'wyandotte', 'fort_payne', 'dover'],
         desc: 'Elongated ritual blade deposited in ceremonial copper and galena burials.'
+      },
+      {
+        id: 'type_jacks_reef_pent',
+        name: "Jack's Reef Pentagonal Point",
+        category: 'point',
+        shape: 'jacks_reef_pent',
+        region: 'Northeast',
+        era: 'Late Woodland (500 - 900 CE)',
+        baseLen: 2.7,
+        baseVal: 360,
+        distribution: 'Central NY, Onondaga Escarpment & Lake Ontario',
+        diagnostics: 'Extremely thin, pentagonal blade with sharp angular shoulders and straight base.',
+        allowedMats: ['onondaga', 'normanskill', 'penn_jasper'],
+        desc: 'Razor-thin pentagonal arrowpoint manufactured from high-grade mottled Onondaga chert.'
+      },
+      {
+        id: 'type_jacks_reef_corner',
+        name: "Jack's Reef Corner-Notched Arrow",
+        category: 'point',
+        shape: 'jacks_reef_corner',
+        region: 'Northeast',
+        era: 'Late Woodland (600 - 950 CE)',
+        baseLen: 2.8,
+        baseVal: 440,
+        distribution: 'New York, Pennsylvania & Lake Terraces',
+        diagnostics: 'Incredibly flat and thin, deep needle corner notches with delicate pointed barbs.',
+        allowedMats: ['onondaga', 'normanskill', 'penn_jasper'],
+        desc: 'Among the most fragile and masterfully pressure-flaked Woodland arrowheads in existence.'
+      },
+      {
+        id: 'type_levanna',
+        name: 'Levanna Broad Triangle Arrowhead',
+        category: 'point',
+        shape: 'levanna',
+        region: 'Northeast',
+        era: 'Late Woodland (700 - 1,200 CE)',
+        baseLen: 2.2,
+        baseVal: 290,
+        distribution: 'Eastern Woodlands, New York & New England',
+        diagnostics: 'Broad equilateral triangular arrowpoint with deeply concave basal margin.',
+        allowedMats: ['onondaga', 'normanskill', 'penn_jasper', 'munsungan'],
+        desc: 'The classic large bow-and-arrow warhead of the eastern Iroquoian and Algonquian tribes.'
+      },
+      {
+        id: 'type_madison',
+        name: 'Madison True Bird Point',
+        category: 'point',
+        shape: 'madison',
+        region: 'Midwest',
+        era: 'Mississippian / Late Woodland (800 - 1,600 CE)',
+        baseLen: 1.5,
+        baseVal: 240,
+        distribution: 'Continental US Floodplains & Camps',
+        diagnostics: 'Neat, small isosceles triangular arrowpoint with straight or slightly convex base.',
+        allowedMats: ['burlington', 'flintridge_gem', 'uppermercer', 'delaware'],
+        desc: 'Ubiquitous true prehistoric arrowpoint used for small game and warfare.'
       },
       {
         id: 'type_cahokia_tri',
@@ -1566,18 +2099,174 @@
         desc: 'Ritual arrowpoint deposited in Mound 72 elite warrior burials.'
       },
       {
-        id: 'type_fort_ancient',
-        name: 'Fort Ancient Serrated Arrowhead',
+        id: 'type_hamilton_incurvate',
+        name: 'Hamilton Incurvate Arrowpoint',
         category: 'point',
-        shape: 'fort_ancient',
-        region: 'Midwest',
-        era: 'Late Prehistoric (1,200 - 1,650 CE)',
+        shape: 'hamilton',
+        region: 'Southeast',
+        era: 'Late Woodland / Mississippian (500 - 1,200 CE)',
         baseLen: 1.8,
-        baseVal: 260,
-        distribution: 'Ohio River Valley & Little Miami Terraces',
-        diagnostics: 'Long slender triangular arrowpoint with needle tip and razor-serrated edges.',
-        allowedMats: ['uppermercer', 'flintridge_gem', 'zaleski', 'delaware', 'pipe_creek'],
-        desc: 'True bow-and-arrow warhead crafted by Fort Ancient agriculturalists.'
+        baseVal: 310,
+        distribution: 'Tennessee Valley River Benches',
+        diagnostics: 'Distinctive incurvate scooped blade margins, deeply concave base, sharp auriculate tips.',
+        allowedMats: ['fort_payne', 'dover', 'tallahatta'],
+        desc: 'Slender, hollow-sided triangular arrowpoint of extraordinary sharpness.'
+      },
+      {
+        id: 'type_nodena_willow',
+        name: 'Nodena Willow Leaf Arrowpoint',
+        category: 'point',
+        shape: 'nodena',
+        region: 'Southeast',
+        era: 'Late Mississippian (1,400 - 1,650 CE)',
+        baseLen: 2.1,
+        baseVal: 330,
+        distribution: 'Mississippi Alluvial Bottoms, Arkansas & TN',
+        diagnostics: 'Bipointed slender elliptical willow leaf silhouette, delicate needle pressure flaking.',
+        allowedMats: ['burlington', 'dover', 'arkansas_novaculite'],
+        desc: 'Exquisite bipointed willow-leaf arrowpoint crafted by Protohistoric chiefdoms.'
+      },
+      {
+        id: 'type_duck_river_sword',
+        name: 'Duck River Ceremonial Chert Sword',
+        category: 'blade',
+        shape: 'duck_river_sword',
+        region: 'Southeast',
+        era: 'Mississippian (1,200 - 1,400 CE)',
+        baseLen: 5.6,
+        baseVal: 850,
+        distribution: 'Duck River Cache, Humphreys Co., TN',
+        diagnostics: 'Monumental elongated bifacial ritual sword, parallel blade margins, lenticular cross section.',
+        allowedMats: ['dover', 'duck_river_stone', 'mill_creek', 'fort_payne'],
+        desc: 'Spectacular monumental ceremonial sword buried in sovereign Mississippian elite caches.'
+      },
+
+      // --- WESTERN, DESERT & PACIFIC NORTHWEST ---
+      {
+        id: 'type_elko_corner',
+        name: 'Elko Corner-Notched Dart',
+        category: 'point',
+        shape: 'elko',
+        region: 'West',
+        era: 'Great Basin Archaic (1,300 BCE - 700 CE)',
+        baseLen: 2.8,
+        baseVal: 340,
+        distribution: 'Zion Plateau, Virgin River Basin & Great Basin Caves',
+        diagnostics: 'Triangular blade, deep diagonal corner notches, expanding stem.',
+        allowedMats: ['mahogany_obsidian', 'snowflake_obsidian', 'rainbow_obsidian', 'alibates', 'black_basalt'],
+        desc: 'Primary Great Basin atlatl dart head with razor-thin pressure edges.'
+      },
+      {
+        id: 'type_desert_side',
+        name: 'Desert Side-Notched Arrowhead',
+        category: 'point',
+        shape: 'desert_side',
+        region: 'West',
+        era: 'Late Prehistoric Desert (1,100 - 1,700 CE)',
+        baseLen: 1.3,
+        baseVal: 250,
+        distribution: 'Death Valley Washes, Mojave & Great Basin Playas',
+        diagnostics: 'Miniature triangular point with high side notches and deep basal notch.',
+        allowedMats: ['mahogany_obsidian', 'rainbow_obsidian', 'snowflake_obsidian', 'gold_sheen_obsidian'],
+        desc: 'True desert arrowpoint utilized for high-velocity bighorn sheep hunting.'
+      },
+      {
+        id: 'type_shumla',
+        name: 'Pecos River Shumla Barbed Point',
+        category: 'point',
+        shape: 'shumla',
+        region: 'West',
+        era: 'Middle Archaic (2,500 - 1,000 BCE)',
+        baseLen: 2.9,
+        baseVal: 460,
+        distribution: 'Lower Pecos River & Val Verde Rockshelters',
+        diagnostics: 'Exaggerated downward-sweeping barbs flanking a rectangular stem.',
+        allowedMats: ['alibates', 'edwards_butter', 'georgetown_flint'],
+        desc: 'Dramatically barbed spearpoint discovered in dry cliff rockshelters.'
+      },
+      {
+        id: 'type_cascade_willow',
+        name: 'Cascade Bipointed Willow Lance',
+        category: 'spear',
+        shape: 'cascade',
+        region: 'West',
+        era: 'Old Cordilleran (7,000 - 4,000 BCE)',
+        baseLen: 4.1,
+        baseVal: 450,
+        distribution: 'Columbia River Gorge & Snake River Terraces',
+        diagnostics: 'Slender bipointed willow leaf lanceolate with thick diamond median ridge.',
+        allowedMats: ['columbia_dacite', 'green_burns_obsidian', 'gold_sheen_obsidian'],
+        desc: 'Ancient Pacific Northwest salmon and elk hunting lanceolate.'
+      },
+      {
+        id: 'type_windust',
+        name: 'Windust Contracting-Stem Spear',
+        category: 'spear',
+        shape: 'windust',
+        region: 'West',
+        era: 'Early Holocene (9,000 - 6,500 BCE)',
+        baseLen: 3.9,
+        baseVal: 520,
+        distribution: 'Columbia Plateau Washes & Snake River Caves',
+        diagnostics: 'Short contracting stem, straight shoulders, broad Paleo lance blade.',
+        allowedMats: ['columbia_dacite', 'green_burns_obsidian', 'black_basalt'],
+        desc: 'Early post-glacial hunting weapon from the Columbia River basalt canyons.'
+      },
+      {
+        id: 'type_gunther_barbed',
+        name: 'Gunther Island Drooping Barbed Arrow',
+        category: 'point',
+        shape: 'gunther',
+        region: 'West',
+        era: 'Pacific Coast Late Prehistoric (800 - 1,700 CE)',
+        baseLen: 2.2,
+        baseVal: 480,
+        distribution: 'Klamath Basin, Humboldt Bay & Columbia Estuaries',
+        diagnostics: 'Needle-thin triangular blade with long, needle-pointed barbs extending past stem base.',
+        allowedMats: ['green_burns_obsidian', 'gold_sheen_obsidian', 'rainbow_obsidian'],
+        desc: 'Masterwork coastal arrowpoint with extreme downward-drooping barbed talons.'
+      },
+      {
+        id: 'type_stockton_serrated',
+        name: 'Stockton Multi-Notched Obsidian Arrow',
+        category: 'point',
+        shape: 'stockton',
+        region: 'West',
+        era: 'Central Valley Late Prehistoric (700 - 1,750 CE)',
+        baseLen: 1.9,
+        baseVal: 440,
+        distribution: 'San Joaquin & Sacramento Delta Mounds',
+        diagnostics: 'Needle tip with deep multi-toothed saw serrations along both blade edges.',
+        allowedMats: ['rainbow_obsidian', 'snowflake_obsidian', 'franciscan_chert'],
+        desc: 'Intricate California arrowpoint displaying deep ornamental edge serrations.'
+      },
+      {
+        id: 'type_pinto_bifurcate',
+        name: 'Pinto Basin Bifurcated Dart',
+        category: 'point',
+        shape: 'pinto',
+        region: 'West',
+        era: 'Desert Archaic (4,000 - 1,500 BCE)',
+        baseLen: 2.7,
+        baseVal: 360,
+        distribution: 'Mojave Desert Dry Lakes & Joshua Tree Terraces',
+        diagnostics: 'Triangular blade with broad, deeply notched bifurcated stem and ear lobes.',
+        allowedMats: ['black_basalt', 'columbia_dacite', 'mahogany_obsidian'],
+        desc: 'Heavy desert atlatl point made to withstand impact on volcanic basalt gravels.'
+      },
+      {
+        id: 'type_humboldt_concave',
+        name: 'Humboldt Basal-Notched Lance',
+        category: 'spear',
+        shape: 'humboldt',
+        region: 'West',
+        era: 'Great Basin Archaic (3,000 - 500 BCE)',
+        baseLen: 3.4,
+        baseVal: 390,
+        distribution: 'Humboldt Sink & Nevada Playa Caves',
+        diagnostics: 'Lanceolate silhouette with deep V-shaped notched concavity at base.',
+        allowedMats: ['mahogany_obsidian', 'gold_sheen_obsidian', 'black_basalt'],
+        desc: 'Unnotched lanceolate point featuring a deeply scooped concave basal socket.'
       },
 
       // --- LITHIC TOOLS: DRILLS, SCRAPERS & PERFORATORS ---
@@ -1623,49 +2312,47 @@
         allowedMats: ['flintridge_gem', 'wyandotte', 'uppermercer', 'delaware'],
         desc: 'Exhausted knife resharpened down to the haft into a heavy-duty hide and wood scraper.'
       },
-
-      // --- WESTERN & DESERT EXPEDITIONS ---
       {
-        id: 'type_elko_corner',
-        name: 'Elko Corner-Notched Dart',
-        category: 'point',
-        shape: 'elko',
-        region: 'West',
-        era: 'Great Basin Archaic (1,300 BCE - 700 CE)',
-        baseLen: 2.8,
-        baseVal: 340,
-        distribution: 'Zion Plateau, Virgin River Basin & Great Basin Caves',
-        diagnostics: 'Triangular blade, deep diagonal corner notches, expanding stem.',
-        allowedMats: ['mahogany_obsidian', 'snowflake_obsidian', 'rainbow_obsidian', 'alibates', 'black_basalt'],
-        desc: 'Primary Great Basin atlatl dart head with razor-thin pressure edges.'
+        id: 'type_spokeshave',
+        name: 'Archaic Notched Spokeshave Shaft-Scraper',
+        category: 'tool',
+        shape: 'spokeshave',
+        region: 'Midwest',
+        era: 'Archaic Period (6,000 - 1,500 BCE)',
+        baseLen: 2.6,
+        baseVal: 280,
+        distribution: 'Midcontinental River Bluff Workshops',
+        diagnostics: 'Unifacial flint flake featuring a steep semicircular concave notch for smoothing wood arrow shafts.',
+        allowedMats: ['burlington', 'uppermercer', 'wyandotte', 'fort_payne'],
+        desc: 'Specialized woodworking draw-tool used to plane down straight spear and atlatl shafts.'
       },
       {
-        id: 'type_desert_side',
-        name: 'Desert Side-Notched Arrowhead',
-        category: 'point',
-        shape: 'desert_side',
-        region: 'West',
-        era: 'Late Prehistoric Desert (1,100 - 1,700 CE)',
-        baseLen: 1.3,
-        baseVal: 250,
-        distribution: 'Death Valley Washes, Mojave & Great Basin Playas',
-        diagnostics: 'Miniature triangular point with high side notches and deep basal notch.',
-        allowedMats: ['mahogany_obsidian', 'rainbow_obsidian', 'snowflake_obsidian'],
-        desc: 'True desert arrowpoint utilized for high-velocity bighorn sheep hunting.'
+        id: 'type_graver_spur',
+        name: 'Paleo Micro-Graver Spur',
+        category: 'tool',
+        shape: 'graver',
+        region: 'Midwest',
+        era: 'Paleo-Indian (11,500 - 9,000 BCE)',
+        baseLen: 2.1,
+        baseVal: 290,
+        distribution: 'Paleo Encampments & Terrace Wash',
+        diagnostics: 'Prismatic bladelet flake sporting a tiny, needle-sharp pressure-flaked spur projection.',
+        allowedMats: ['flintridge_gem', 'kniferiver', 'penn_jasper', 'onondaga'],
+        desc: 'Delicate spurred flint flake utilized to engrave bone needles, ivory, and antler.'
       },
       {
-        id: 'type_shumla',
-        name: 'Pecos River Shumla Barbed Point',
-        category: 'point',
-        shape: 'shumla',
-        region: 'West',
-        era: 'Middle Archaic (2,500 - 1,000 BCE)',
-        baseLen: 2.9,
-        baseVal: 460,
-        distribution: 'Lower Pecos River & Val Verde Rockshelters',
-        diagnostics: 'Exaggerated downward-sweeping barbs flanking a rectangular stem.',
-        allowedMats: ['alibates', 'edwards_butter', 'mahogany_obsidian'],
-        desc: 'Dramatically barbed spearpoint discovered in dry cliff rockshelters.'
+        id: 'type_celt_adze',
+        name: 'Woodland Chert Chipping Adze',
+        category: 'tool',
+        shape: 'celt_adze',
+        region: 'Midwest',
+        era: 'Woodland Period (500 BCE - 800 CE)',
+        baseLen: 4.6,
+        baseVal: 350,
+        distribution: 'Illinois & Ohio Woodland Forest Sites',
+        diagnostics: 'Heavy percussion-flaked rectangular biface with beveled bit polished from woodworking.',
+        allowedMats: ['mill_creek', 'burlington', 'kaolin_chert', 'fort_payne'],
+        desc: 'Heavy flint adze bit designed to hollow out dugout canoes and fell timber.'
       }
     ];
 
@@ -1678,9 +2365,27 @@
     ];
 
     /* =========================================================================
-       64x64 PIXEL PROCEDURAL LITHIC ENGINE (AUTHENTIC FLINT & OBSIDIAN RENDERER)
+       COLLISION-PROOF ID GENERATOR & AUTO-REPAIR SANITIZER
        ========================================================================= */
-    let globalRelicSerial = 2001;
+    function generateUniqueRelicId() {
+      return 'LITH-' + Date.now().toString(36) + '-' + Math.random().toString(36).substring(2, 9);
+    }
+
+    function sanitizeInventoryIds() {
+      if (!State) return;
+      const seen = new Set();
+      const repair = (item) => {
+        if (!item) return;
+        if (!item.id || seen.has(item.id)) {
+          item.id = generateUniqueRelicId();
+        }
+        seen.add(item.id);
+      };
+
+      if (Array.isArray(State.inventory)) State.inventory.forEach(repair);
+      if (Array.isArray(State.shadowbox)) State.shadowbox.forEach(repair);
+      if (Array.isArray(State.auctions)) State.auctions.forEach(a => a && repair(a.item));
+    }
 
     function generateProceduralArtifact(forcedType = null, forcedMat = null, forcedGrade = null, forcedCOA = false) {
       const typeDef = forcedType || LITHIC_TYPOLOGIES[Math.floor(Math.random() * LITHIC_TYPOLOGIES.length)];
@@ -1715,7 +2420,7 @@
       );
 
       const relic = {
-        id: 'LITH-' + (globalRelicSerial++),
+        id: generateUniqueRelicId(),
         timestamp: Date.now() + Math.floor(Math.random() * 100),
         title: typeDef.name,
         category: typeDef.category,
@@ -1762,7 +2467,9 @@
       relic.value = Math.round(relic.value * 1.60);
     }
 
-    /* 64x64 Virtual Canvas Renderer For Real Stone Lithics */
+    /* =========================================================================
+       64x64 PIXEL PROCEDURAL LITHIC ENGINE (EXPANDED TO RENDER ALL SHAPES)
+       ========================================================================= */
     function renderPixelLithic(canvas, relic) {
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
@@ -1799,6 +2506,12 @@
               halfW = ny < 0.48 ? Math.sin((ny / 0.48) * (Math.PI / 2)) * 0.44 : 0.44 - (ny - 0.48) * 0.10;
               if (ny > 0.82 && Math.abs(nx) < (0.88 - ny) * 2.8) halfW = 0;
             }
+          } else if (shape === 'ross_county') {
+            if (ny >= 0.06 && ny <= 0.88) {
+              if (ny < 0.55) halfW = Math.sin((ny / 0.55) * (Math.PI / 2)) * 0.48;
+              else halfW = 0.48 - (ny - 0.55) * 0.20;
+              if (ny > 0.82 && Math.abs(nx) < 0.18) halfW = 0;
+            }
           } else if (shape === 'folsom') {
             if (ny >= 0.08 && ny <= 0.86) {
               halfW = ny < 0.45 ? Math.sin((ny / 0.45) * (Math.PI / 2)) * 0.46 : 0.46 - (ny - 0.45) * 0.12;
@@ -1810,6 +2523,25 @@
               else if (ny < 0.74) halfW = 0.38 - ((ny - 0.50) / 0.24) * 0.14;
               else halfW = 0.24 + ((ny - 0.74) / 0.16) * 0.18;
               if (ny > 0.84 && Math.abs(nx) < (0.90 - ny) * 2.5) halfW = 0;
+            }
+          } else if (shape === 'redstone') {
+            if (ny >= 0.08 && ny <= 0.88) {
+              halfW = Math.sin((ny - 0.08) / 0.80 * (Math.PI / 2)) * 0.48;
+              if (ny > 0.80 && Math.abs(nx) < (0.88 - ny) * 2.8) halfW = 0;
+            }
+          } else if (shape === 'simpson') {
+            if (ny >= 0.06 && ny <= 0.90) {
+              if (ny < 0.52) halfW = Math.sin((ny / 0.52) * (Math.PI / 2)) * 0.42;
+              else if (ny < 0.76) halfW = 0.42 - ((ny - 0.52) / 0.24) * 0.18;
+              else halfW = 0.24 + ((ny - 0.76) / 0.14) * 0.16;
+              if (ny > 0.84 && Math.abs(nx) < 0.16) halfW = 0;
+            }
+          } else if (shape === 'suwannee') {
+            if (ny >= 0.06 && ny <= 0.90) {
+              if (ny < 0.55) halfW = Math.sin((ny / 0.55) * (Math.PI / 2)) * 0.44;
+              else if (ny < 0.78) halfW = 0.44 - ((ny - 0.55) / 0.23) * 0.12;
+              else halfW = 0.32;
+              if (ny > 0.84 && Math.abs(nx) < 0.20) halfW = 0;
             }
           } else if (shape === 'agate_basin') {
             if (ny >= 0.06 && ny <= 0.88) {
@@ -1835,11 +2567,23 @@
               if (ny < 0.66) halfW = Math.sin((ny / 0.66) * (Math.PI / 2)) * 0.38;
               else halfW = 0.28;
             }
+          } else if (shape === 'eden') {
+            if (ny >= 0.05 && ny <= 0.90) {
+              if (ny < 0.72) halfW = Math.sin((ny - 0.05) / 0.67 * (Math.PI / 2)) * 0.24;
+              else halfW = 0.20;
+            }
           } else if (shape === 'kirk_corner') {
             if (ny >= 0.08 && ny <= 0.86) {
               if (ny < 0.64) halfW = ((ny - 0.08) / 0.56) * 0.48;
               else if (ny >= 0.64 && ny <= 0.75) halfW = 0.22;
               else halfW = 0.42;
+            }
+          } else if (shape === 'kirk_stemmed') {
+            if (ny >= 0.08 && ny <= 0.88) {
+              if (ny < 0.65) {
+                halfW = ((ny - 0.08) / 0.57) * 0.46;
+                if (y % 3 === 0) halfW -= 0.02;
+              } else halfW = 0.22;
             }
           } else if (shape === 'dalton') {
             if (ny >= 0.08 && ny <= 0.88) {
@@ -1851,11 +2595,23 @@
                 if (ny > 0.82 && Math.abs(nx) < (0.88 - ny) * 2.6) halfW = 0;
               }
             }
+          } else if (shape === 'greenbrier') {
+            if (ny >= 0.08 && ny <= 0.88) {
+              if (ny < 0.62) {
+                halfW = ((ny - 0.08) / 0.54) * 0.48;
+                if (y % 3 === 0) halfW -= 0.02;
+              } else if (ny >= 0.62 && ny <= 0.72) {
+                halfW = 0.22;
+              } else {
+                halfW = 0.44;
+                if (ny > 0.82 && Math.abs(nx) < 0.20) halfW = 0;
+              }
+            }
           } else if (shape === 'lost_lake') {
             if (ny >= 0.08 && ny <= 0.86) {
               if (ny < 0.58) halfW = (ny / 0.58) * 0.52;
               else if (ny >= 0.58 && ny <= 0.76) {
-                halfW = Math.abs(nx) > 0.24 ? 0.54 : 0.16; // Deep drooping barbs
+                halfW = Math.abs(nx) > 0.24 ? 0.54 : 0.16;
               } else halfW = 0.38;
             }
           } else if (shape === 'calf_creek') {
@@ -1863,8 +2619,15 @@
               if (ny < 0.62) halfW = ((ny - 0.08) / 0.54) * 0.56;
               else {
                 halfW = 0.56;
-                // Deep vertical parallel basal notches
                 if (ny >= 0.68 && (Math.abs(Math.abs(nx) - 0.24) < 0.06)) halfW = 0;
+              }
+            }
+          } else if (shape === 'eva') {
+            if (ny >= 0.08 && ny <= 0.86) {
+              if (ny < 0.65) halfW = ((ny - 0.08) / 0.57) * 0.52;
+              else {
+                halfW = 0.52;
+                if (ny >= 0.72 && (Math.abs(Math.abs(nx) - 0.20) < 0.06)) halfW = 0;
               }
             }
           } else if (shape === 'hardin') {
@@ -1880,11 +2643,78 @@
               else halfW = 0.44;
               if (ny > 0.80 && Math.abs(nx) < 0.24) halfW = 0;
             }
+          } else if (shape === 'oxbow') {
+            if (ny >= 0.12 && ny <= 0.86) {
+              if (ny < 0.58) halfW = ((ny - 0.12) / 0.46) * 0.46;
+              else if (ny >= 0.58 && ny <= 0.70) halfW = 0.20;
+              else halfW = 0.44;
+              if (ny > 0.80 && Math.abs(nx) < 0.22) halfW = 0;
+            }
+          } else if (shape === 'stanly') {
+            if (ny >= 0.10 && ny <= 0.86) {
+              if (ny < 0.64) halfW = ((ny - 0.10) / 0.54) * 0.48;
+              else if (ny >= 0.64 && ny <= 0.84) {
+                halfW = 0.18;
+                if (ny > 0.78 && Math.abs(nx) < 0.06) halfW = 0;
+              }
+            }
+          } else if (shape === 'lecroy') {
+            if (ny >= 0.16 && ny <= 0.84) {
+              if (ny < 0.55) {
+                halfW = ((ny - 0.16) / 0.39) * 0.44;
+                if (y % 2 === 0) halfW -= 0.02;
+              } else if (ny >= 0.55 && ny <= 0.66) {
+                halfW = 0.20;
+              } else {
+                halfW = 0.38;
+                if (ny > 0.72 && Math.abs(nx) < 0.14) halfW = 0;
+              }
+            }
+          } else if (shape === 'maccorkle') {
+            if (ny >= 0.10 && ny <= 0.86) {
+              if (ny < 0.60) halfW = ((ny - 0.10) / 0.50) * 0.48;
+              else if (ny >= 0.60 && ny <= 0.70) halfW = 0.22;
+              else {
+                halfW = 0.38;
+                if (ny > 0.78 && Math.abs(nx) < 0.14) halfW = 0;
+              }
+            }
+          } else if (shape === 'bolen') {
+            if (ny >= 0.08 && ny <= 0.86) {
+              if (ny < 0.58) halfW = ((ny - 0.08) / 0.50) * 0.44;
+              else if (ny >= 0.58 && ny <= 0.70) halfW = 0.20;
+              else halfW = 0.40;
+            }
+          } else if (shape === 'benton') {
+            if (ny >= 0.08 && ny <= 0.88) {
+              if (ny < 0.62) halfW = ((ny - 0.08) / 0.54) * 0.50;
+              else halfW = 0.28;
+            }
           } else if (shape === 'hopewell') {
             if (ny >= 0.10 && ny <= 0.86) {
               if (ny < 0.66) halfW = Math.sin((ny - 0.10) / 0.56 * Math.PI) * 0.56;
               else if (ny >= 0.66 && ny <= 0.76) halfW = 0.22;
               else halfW = 0.44;
+            }
+          } else if (shape === 'jacks_reef_pent') {
+            if (ny >= 0.12 && ny <= 0.84) {
+              if (ny < 0.52) halfW = ((ny - 0.12) / 0.40) * 0.50;
+              else halfW = 0.50 - ((ny - 0.52) / 0.32) * 0.14;
+            }
+          } else if (shape === 'jacks_reef_corner') {
+            if (ny >= 0.12 && ny <= 0.84) {
+              if (ny < 0.60) halfW = ((ny - 0.12) / 0.48) * 0.54;
+              else if (ny >= 0.60 && ny <= 0.72) halfW = Math.abs(nx) > 0.26 ? 0.54 : 0.16;
+              else halfW = 0.36;
+            }
+          } else if (shape === 'levanna') {
+            if (ny >= 0.14 && ny <= 0.84) {
+              halfW = ((ny - 0.14) / 0.70) * 0.50;
+              if (ny > 0.76 && Math.abs(nx) < (0.84 - ny) * 3.5) halfW = 0;
+            }
+          } else if (shape === 'madison') {
+            if (ny >= 0.16 && ny <= 0.82) {
+              halfW = ((ny - 0.16) / 0.66) * 0.34;
             }
           } else if (shape === 'cahokia_tri') {
             if (ny >= 0.18 && ny <= 0.82) {
@@ -1892,10 +2722,15 @@
               if (ny > 0.66 && ny < 0.73) halfW = 0.16;
               if (ny > 0.79 && Math.abs(nx) < 0.10) halfW = 0;
             }
-          } else if (shape === 'fort_ancient') {
-            if (ny >= 0.12 && ny <= 0.84) {
-              halfW = ((ny - 0.12) / 0.72) * 0.32;
-              if (y % 3 === 0) halfW -= 0.02;
+          } else if (shape === 'hamilton') {
+            if (ny >= 0.16 && ny <= 0.84) {
+              const t = (ny - 0.16) / 0.68;
+              halfW = (t * 0.36) - (Math.sin(t * Math.PI) * 0.06);
+              if (ny > 0.78 && Math.abs(nx) < 0.16) halfW = 0;
+            }
+          } else if (shape === 'nodena') {
+            if (ny >= 0.10 && ny <= 0.88) {
+              halfW = Math.sin((ny - 0.10) / 0.78 * Math.PI) * 0.28;
             }
           } else if (shape === 'elko') {
             if (ny >= 0.12 && ny <= 0.86) {
@@ -1916,6 +2751,44 @@
                 halfW = Math.abs(nx) > 0.22 ? 0.52 : 0.16;
               } else halfW = 0.16;
             }
+          } else if (shape === 'cascade') {
+            if (ny >= 0.06 && ny <= 0.90) {
+              halfW = Math.sin((ny - 0.06) / 0.84 * Math.PI) * 0.30;
+            }
+          } else if (shape === 'windust') {
+            if (ny >= 0.08 && ny <= 0.88) {
+              if (ny < 0.66) halfW = Math.sin((ny - 0.08) / 0.58 * (Math.PI / 2)) * 0.44;
+              else halfW = 0.22 - (ny - 0.66) * 0.10;
+            }
+          } else if (shape === 'gunther') {
+            if (ny >= 0.14 && ny <= 0.86) {
+              if (ny < 0.52) halfW = ((ny - 0.14) / 0.38) * 0.44;
+              else if (ny >= 0.52 && ny <= 0.86) {
+                halfW = Math.abs(nx) > 0.20 ? 0.44 : (Math.abs(nx) < 0.10 ? 0.10 : 0);
+              }
+            }
+          } else if (shape === 'stockton') {
+            if (ny >= 0.16 && ny <= 0.84) {
+              if (ny < 0.62) {
+                halfW = ((ny - 0.16) / 0.46) * 0.36;
+                if (y % 3 === 0) halfW -= 0.03;
+              } else if (ny >= 0.62 && ny <= 0.72) {
+                halfW = 0.16;
+              } else halfW = 0.30;
+            }
+          } else if (shape === 'pinto') {
+            if (ny >= 0.12 && ny <= 0.86) {
+              if (ny < 0.60) halfW = ((ny - 0.12) / 0.48) * 0.46;
+              else if (ny >= 0.60 && ny <= 0.86) {
+                halfW = 0.32;
+                if (ny > 0.74 && Math.abs(nx) < 0.14) halfW = 0;
+              }
+            }
+          } else if (shape === 'humboldt') {
+            if (ny >= 0.08 && ny <= 0.88) {
+              halfW = Math.sin((ny - 0.08) / 0.80 * (Math.PI / 2)) * 0.36;
+              if (ny > 0.80 && Math.abs(nx) < (0.88 - ny) * 2.6) halfW = 0;
+            }
           }
 
           // --- 2. KNIVES, BIFACES & CACHE BLADES ---
@@ -1935,19 +2808,12 @@
             if (ny >= 0.06 && ny <= 0.88) {
               if (ny < 0.70) {
                 halfW = Math.sin((ny / 0.70) * (Math.PI / 2)) * 0.42;
-                if (y % 4 === 0) halfW -= 0.02; // Fine 1-2px micro-denticulation
+                if (y % 4 === 0) halfW -= 0.02;
               } else if (ny >= 0.70 && ny <= 0.77) {
                 halfW = 0.22;
               } else {
                 halfW = 0.34;
               }
-            }
-          } else if (shape === 'decatur') {
-            if (ny >= 0.08 && ny <= 0.86) {
-              if (ny < 0.62) halfW = (ny / 0.62) * 0.46;
-              else if (ny >= 0.62 && ny <= 0.74) halfW = 0.22;
-              else halfW = 0.38;
-              if (ny > 0.80 && Math.abs(nx) > 0.16) halfW = 0.14; // Fractured base corner burins
             }
           } else if (shape === 'turkey_tail') {
             if (ny >= 0.06 && ny <= 0.90) {
@@ -1958,35 +2824,52 @@
           } else if (shape === 'adena_robbins') {
             if (ny >= 0.06 && ny <= 0.68) halfW = Math.sin((ny - 0.06) / 0.62 * Math.PI) * 0.58;
             else if (ny > 0.68 && ny <= 0.90) halfW = 0.24 - (ny - 0.68) * 0.12;
-          } else if (shape === 'adena_dickson') {
-            if (ny >= 0.06 && ny <= 0.65) halfW = ((ny - 0.06) / 0.59) * 0.52;
-            else if (ny > 0.65 && ny <= 0.90) halfW = 0.36 - ((ny - 0.65) / 0.25) * 0.24;
           } else if (shape === 'copena') {
             if (ny >= 0.06 && ny <= 0.88) {
               if (ny < 0.55) halfW = Math.sin((ny / 0.55) * (Math.PI / 2)) * 0.40;
               else if (ny < 0.75) halfW = 0.40 - ((ny - 0.55) / 0.20) * 0.14;
               else halfW = 0.26 + ((ny - 0.75) / 0.13) * 0.12;
             }
+          } else if (shape === 'duck_river_sword') {
+            if (ny >= 0.04 && ny <= 0.94) {
+              if (ny < 0.20) halfW = Math.sin((ny - 0.04) / 0.16 * (Math.PI / 2)) * 0.36;
+              else if (ny < 0.80) halfW = 0.36;
+              else halfW = Math.sin((0.94 - ny) / 0.14 * (Math.PI / 2)) * 0.36;
+            }
           }
 
-          // --- 3. LITHIC TOOLS: DRILLS & SCRAPERS ---
+          // --- 3. LITHIC TOOLS: DRILLS, SCRAPERS & ADZES ---
           else if (shape === 't_drill') {
             if (ny >= 0.08 && ny <= 0.66) {
-              halfW = 0.07; // Slender cylindrical drill rod bit
+              halfW = 0.07;
             } else if (ny > 0.66 && ny <= 0.88) {
-              halfW = 0.52; // Wide flaring T-thumb base
+              halfW = 0.52;
             }
           } else if (shape === 'thumb_scraper') {
             if (ny >= 0.14 && ny <= 0.82) {
-              // Convex teardrop scraper with steep scraping bit
               halfW = Math.sin((ny - 0.14) / 0.68 * Math.PI) * 0.46;
               if (ny > 0.65) halfW = 0.46;
             }
           } else if (shape === 'hafted_scraper') {
             if (ny >= 0.20 && ny <= 0.86) {
-              if (ny < 0.52) halfW = 0.44; // Blunt, rounded re-sharpened scraping bit
-              else if (ny >= 0.52 && ny <= 0.68) halfW = 0.20; // Haft notch
-              else halfW = 0.42; // Base
+              if (ny < 0.52) halfW = 0.44;
+              else if (ny >= 0.52 && ny <= 0.68) halfW = 0.20;
+              else halfW = 0.42;
+            }
+          } else if (shape === 'spokeshave') {
+            if (ny >= 0.12 && ny <= 0.86) {
+              halfW = 0.42;
+              if (nx > 0 && Math.sqrt(Math.pow(nx - 0.42, 2) + Math.pow((ny - 0.46) * 2, 2)) < 0.24) halfW = 0.16;
+            }
+          } else if (shape === 'graver') {
+            if (ny >= 0.08 && ny <= 0.82) {
+              if (ny < 0.24) halfW = 0.08;
+              else halfW = Math.sin((ny - 0.24) / 0.58 * Math.PI) * 0.46;
+            }
+          } else if (shape === 'celt_adze') {
+            if (ny >= 0.08 && ny <= 0.90) {
+              if (ny < 0.30) halfW = Math.sin((ny - 0.08) / 0.22 * (Math.PI / 2)) * 0.52;
+              else halfW = 0.52 - ((ny - 0.30) / 0.60) * 0.26;
             }
           }
 
@@ -2022,8 +2905,11 @@
 
           // Central Fluting Channels
           if ((shape === 'clovis' && Math.abs(nx) < 0.09 && ny > 0.38 && ny < 0.82) ||
+              (shape === 'ross_county' && Math.abs(nx) < 0.09 && ny > 0.32 && ny < 0.82) ||
               (shape === 'folsom' && Math.abs(nx) < 0.14 && ny > 0.18 && ny < 0.82) ||
-              (shape === 'cumberland' && Math.abs(nx) < 0.08 && ny > 0.18 && ny < 0.84)) {
+              (shape === 'cumberland' && Math.abs(nx) < 0.08 && ny > 0.18 && ny < 0.84) ||
+              (shape === 'redstone' && Math.abs(nx) < 0.10 && ny > 0.28 && ny < 0.82) ||
+              (shape === 'simpson' && Math.abs(nx) < 0.08 && ny > 0.26 && ny < 0.82)) {
             grid[y][x] = 3;
             continue;
           }
@@ -2034,7 +2920,16 @@
             continue;
           }
 
-          // Banding (Flint Ridge, Alibates, Wyandotte Bullseye)
+          // Concentric Orbicular Bullseye Rings (Wyandotte & Cobden Ball Chert)
+          if (mat.orbicular) {
+            const dist = Math.sqrt(Math.pow(x - 32, 2) + Math.pow(y - 36, 2));
+            if (Math.sin(dist * 0.6) > 0.4) {
+              grid[y][x] = 4;
+              continue;
+            }
+          }
+
+          // Banding (Flint Ridge, Alibates, Dover, Fort Payne)
           if (mat.banding) {
             const wave = Math.sin((x * 0.28 + y * 0.38) + rnd() * 0.1);
             if (wave > 0.48) {
@@ -2043,7 +2938,7 @@
             }
           }
 
-          // Stipple / Cristobalite Snowflake Inclusions
+          // Stipple / Fossil Inclusions / Cristobalite
           if (mat.stipple && rnd() > 0.74) {
             grid[y][x] = 5;
             continue;
@@ -2082,8 +2977,7 @@
         }
       }
     }
-
-    /* =========================================================================
+/* =========================================================================
        GAME STATE MANAGEMENT
        ========================================================================= */
     const State = {
@@ -2144,6 +3038,8 @@
       } catch (e) {
         console.warn('Fresh state initialized', e);
       }
+      // Instantly repairs any duplicates existing in your save file
+      sanitizeInventoryIds();
     }
 
     /* =========================================================================
@@ -2156,7 +3052,7 @@
         badge: 'OHIO ADENA / HOPEWELL',
         singleChance: 0.28,
         cacheChance: 0.06,
-        lore: 'River silt terraces where spring floodwaters expose Adena Robbins blades, Hopewell Snyders, and T-drills.'
+        lore: 'River silt terraces where spring floodwaters expose Adena Robbins blades, Hopewell Snyders, Ross County fluted points, and T-drills.'
       },
       flintridge: {
         name: 'Flint Ridge Quarry Pits (Licking Co., OH)',
@@ -2172,7 +3068,7 @@
         badge: 'HORNSTONE TRAILS',
         singleChance: 0.25,
         cacheChance: 0.05,
-        lore: 'Limestone river bluffs strewn with nodular Wyandotte hornstone cores and Turkey-Tail cache blades.'
+        lore: 'Limestone river bluffs strewn with nodular Wyandotte hornstone cores, Cobden ball flints, and Turkey-Tail cache blades.'
       },
       cahokia: {
         name: 'Cahokia Alluvial Flats (Illinois Basin)',
@@ -2180,23 +3076,47 @@
         badge: 'MISSISSIPPIAN METROPOLIS',
         singleChance: 0.26,
         cacheChance: 0.055,
-        lore: 'Creek alluvium bordering the ancient city, rich with white Burlington tri-points and Cahokia gem points.'
+        lore: 'Creek alluvium bordering the ancient city, rich with white Burlington tri-points, Mill Creek blades, and Cahokia gem points.'
       },
-      driftless: {
-        name: 'Driftless Karst Ridges (Wisconsin)',
-        region: 'Midwest',
-        badge: 'HIXTON ORTHOQUARTZITE',
-        singleChance: 0.24,
-        cacheChance: 0.05,
-        lore: 'Glacial driftless sandstone bluffs hiding ancient Paleo-Indian Scottsbluff and Agate Basin lanceolates.'
+      duckriver: {
+        name: 'Duck River & Tennessee Valley (Humphreys Co., TN)',
+        region: 'Southeast',
+        badge: 'TENNESSEE CHERT SWORDS',
+        singleChance: 0.28,
+        cacheChance: 0.065,
+        lore: 'Gravel bars and lowland terraces concealing massive Dover chert ceremonial swords, Eva points, and Benton blades.'
       },
-      ozarks: {
-        name: 'Ozark Escarpment Rockshelters (Missouri / Arkansas)',
-        region: 'Midwest',
-        badge: 'OZARK HEARTHS',
-        singleChance: 0.25,
-        cacheChance: 0.05,
-        lore: 'Dry rockshelter hearth deposits shielding ancient Dalton beveled knives, Calf Creek points, and scrapers.'
+      suwannee_fl: {
+        name: 'Suwannee & Santa Fe River Springs (Florida)',
+        region: 'Southeast',
+        badge: 'FLORIDA AGATIZED CORAL',
+        singleChance: 0.27,
+        cacheChance: 0.06,
+        lore: 'Limestone river bottoms holding ancient Paleo-Indian Simpson points, Suwannee lanceolates, and colorful agatized coral.'
+      },
+      hudson_valley: {
+        name: 'Hudson Valley & Lake Escarpment (New York)',
+        region: 'Northeast',
+        badge: 'ONONDAGA & LEVANNA',
+        singleChance: 0.26,
+        cacheChance: 0.055,
+        lore: 'Deep glacial soils concealing Onondaga mottled chert, Jack’s Reef pentagonal points, and broad Levanna triangles.'
+      },
+      edwards_tx: {
+        name: 'Edwards Plateau & Pecos Bluffs (Texas)',
+        region: 'West',
+        badge: 'TEXAS HILL COUNTRY',
+        singleChance: 0.27,
+        cacheChance: 0.06,
+        lore: 'Limestone karst ridgetops yielding steely Georgetown flints, barbed Shumla points, and butter chert bifaces.'
+      },
+      columbia_basin: {
+        name: 'Columbia River Basalt Terraces (Washington / Oregon)',
+        region: 'West',
+        badge: 'COLUMBIA CASCADE & DACITE',
+        singleChance: 0.26,
+        cacheChance: 0.055,
+        lore: 'Ancient river canyon terraces sheltering green Burns obsidian, bipointed Cascade lances, and Gunther Island barbed arrows.'
       },
       zion: {
         name: 'Zion Canyon & Virgin River Benches (Utah)',
@@ -2212,7 +3132,7 @@
         badge: 'MOJAVE VOLCANIC',
         singleChance: 0.25,
         cacheChance: 0.05,
-        lore: 'Alkaline lake shorelines and basalt fields hiding volcanic obsidian arrowheads and scrapers.'
+        lore: 'Alkaline lake shorelines and basalt fields hiding volcanic obsidian arrowheads, Stockton serrated points, and scrapers.'
       }
     };
 
@@ -2261,7 +3181,7 @@
           });
         } else if (roll < site.cacheChance + site.singleChance) {
           pieceCount++;
-          const chosenType = regionalTypologies.length > 0 && Math.random() < 0.8
+          const chosenType = regionalTypologies.length > 0 && Math.random() < 0.82
             ? regionalTypologies[Math.floor(Math.random() * regionalTypologies.length)]
             : null;
 
@@ -2410,6 +3330,10 @@
        ========================================================================= */
     const CACHE_PRESETS = [
       {
+        title: 'Duck River Mississippian Ceremonial Cache',
+        lore: 'Buried in an ancient limestone cist, holding massive Dover chert swords, Benton knives, and Eva points coated in mica.'
+      },
+      {
         title: 'Adena Red Ochre Lithic Blade Cache',
         lore: 'Buried in an ancient clay-lined pit along Paint Creek, coated in red ochre pigment between limestone slabs.'
       },
@@ -2419,15 +3343,15 @@
       },
       {
         title: 'Scioto Valley Paleo-Indian Spear Cache',
-        lore: 'A sealed assemblage of fluted Clovis points, Cumberland spears, and lance preforms resting in gravel.'
+        lore: 'A sealed assemblage of fluted Clovis points, Ross County lances, and Cumberland spears resting in gravel.'
       },
       {
-        title: 'Illinois Basin Turkey-Tail Hornstone Cache',
-        lore: 'Over a dozen bi-pointed Harrison County hornstone blades carefully stacked together in flood silt.'
+        title: 'Santa Fe River Agatized Coral Cache',
+        lore: 'Interred inside Florida spring marl, holding translucent agatized coral Simpson spears and Bolen knives.'
       },
       {
-        title: 'Zion Desert Obsidian Cache',
-        lore: 'Stored inside a dry cliff crevice, holding pristine Elko corner-notched points and translucent blades.'
+        title: 'Columbia Gorge Obsidian & Dacite Cache',
+        lore: 'Stored inside a dry basalt cliff crevice, holding pristine green Burns obsidian Cascade blades and Gunther Island barbed points.'
       }
     ];
 
@@ -2693,9 +3617,11 @@
        ========================================================================= */
     function populateGradingSelect() {
       const sel = document.getElementById('select-grading-candidate');
+      if (!sel) return;
       sel.innerHTML = '<option value="">-- Choose specimen to authenticate --</option>';
 
       State.inventory.forEach(item => {
+        // Only include items that do not already possess a COA
         if (!item.coa) {
           const opt = document.createElement('option');
           opt.value = item.id;
@@ -2704,22 +3630,32 @@
         }
       });
 
-      document.getElementById('grading-candidate-preview').classList.add('hidden');
+      // Clear any previous selection so it never lingers in memory
+      State.gradingCandidate = null;
+      sel.value = '';
+      const preview = document.getElementById('grading-candidate-preview');
+      if (preview) preview.classList.add('hidden');
     }
 
     function onGradingCandidateSelected() {
       const id = document.getElementById('select-grading-candidate').value;
+      const preview = document.getElementById('grading-candidate-preview');
+      
       if (!id) {
-        document.getElementById('grading-candidate-preview').classList.add('hidden');
+        if (preview) preview.classList.add('hidden');
         State.gradingCandidate = null;
         return;
       }
 
       const item = State.inventory.find(i => i.id === id);
-      if (!item) return;
+      if (!item || item.coa) {
+        if (preview) preview.classList.add('hidden');
+        State.gradingCandidate = null;
+        return;
+      }
 
       State.gradingCandidate = item;
-      document.getElementById('grading-candidate-preview').classList.remove('hidden');
+      if (preview) preview.classList.remove('hidden');
       document.getElementById('grading-candidate-title').textContent = item.title;
       document.getElementById('grading-candidate-meta').textContent = `${item.material.name} • Raw ${item.grade}`;
       document.getElementById('grading-candidate-val').textContent = `$${item.value}`;
@@ -2733,11 +3669,21 @@
         showToast('Select an uncertified stone relic to authenticate!');
         return;
       }
+
+      // Hard check: cancel immediately if already certified (no fee charged)
+      if (State.gradingCandidate.coa) {
+        showToast('This specimen has already been authenticated!');
+        State.gradingCandidate = null;
+        populateGradingSelect();
+        return;
+      }
+
       if (State.money < 45) {
         showToast('Insufficient funds! Lab fee is $45.');
         return;
       }
 
+      // Charge fee and issue certificate
       State.money -= 45;
       const item = State.gradingCandidate;
       certifyRelic(item);
@@ -2746,6 +3692,7 @@
       Sound.relicFanfare();
       showToast(`Certified! Issued Certificate ${item.coa.certNumber}!`);
 
+      // Update certificate document UI
       document.getElementById('coa-reg-num').textContent = `#${item.coa.certNumber}`;
       document.getElementById('coa-grade-stamp').textContent = `${item.grade} • CERTIFIED`;
       document.getElementById('coa-typology').textContent = item.title;
@@ -2759,6 +3706,9 @@
       const c = document.getElementById('canvas-coa-view');
       renderPixelLithic(c, item);
 
+      // Reset candidate so subsequent button presses cannot charge you again
+      State.gradingCandidate = null;
+
       updateTopBar();
       populateGradingSelect();
       saveGameState();
@@ -2771,8 +3721,11 @@
         return;
       }
       switchTab('grading');
-      document.getElementById('select-grading-candidate').value = State.selectedItem.id;
-      onGradingCandidateSelected();
+      const sel = document.getElementById('select-grading-candidate');
+      if (sel) {
+        sel.value = State.selectedItem.id;
+        onGradingCandidateSelected();
+      }
     }
 
     /* =========================================================================
@@ -2904,7 +3857,12 @@
 
       const item = State.selectedItem;
       State.shadowbox[emptyIdx] = item;
-      State.inventory = State.inventory.filter(i => i.id !== item.id);
+
+      // Remove strictly ONLY this single item from the bag
+      const removeIdx = State.inventory.findIndex(i => i.id === item.id);
+      if (removeIdx !== -1) {
+        State.inventory.splice(removeIdx, 1);
+      }
       State.selectedItem = null;
 
       Sound.relicFanfare();
@@ -2970,10 +3928,10 @@
        ========================================================================= */
     const DEALER_LISTING = [
       { name: '"Flint Ridge Frank"', avatar: '🤠', category: 'blade', note: 'Seeking: Gem Dovetails & Cache Blades', mult: 1.25 },
-      { name: 'Dr. Evelyn Ward', avatar: '🧐', category: 'spear', note: 'Seeking: Paleo Fluted Clovis & Cumberlands', mult: 1.35 },
-      { name: 'Scioto Dan', avatar: '🧔', category: 'point', note: 'Seeking: Hopewell Snyders & Lost Lake Barbs', mult: 1.20 },
-      { name: 'Cahokia Clara', avatar: '👩‍🌾', category: 'point', note: 'Seeking: Cahokia Tri-Points & Burlington Stone', mult: 1.22 },
-      { name: '"Old Timer" Pete', avatar: '👴', category: 'tool', note: 'Seeking: T-Drills, Hafted & Thumbnail Scrapers', mult: 1.30 }
+      { name: 'Dr. Evelyn Ward', avatar: '🧐', category: 'spear', note: 'Seeking: Paleo Fluted Clovis, Ross County & Cumberlands', mult: 1.35 },
+      { name: 'Scioto Dan', avatar: '🧔', category: 'point', note: 'Seeking: Hopewell Snyders, Eva & Lost Lake Barbs', mult: 1.20 },
+      { name: 'Cahokia Clara', avatar: '👩‍🌾', category: 'point', note: 'Seeking: Cahokia Tri-Points, Nodena & Burlington Stone', mult: 1.22 },
+      { name: '"Old Timer" Pete', avatar: '👴', category: 'tool', note: 'Seeking: T-Drills, Hafted Scrapers, Spokeshaves & Adzes', mult: 1.30 }
     ];
 
     function shuffleMarketDealers() {
@@ -3113,7 +4071,16 @@
       const payout = Math.round(item.value * State.haggleBonus * prefBonus * coaBonus);
 
       State.money += payout;
-      State.inventory = State.inventory.filter(i => i.id !== item.id);
+
+      // Remove strictly ONLY this single sold item
+      const removeIdx = State.inventory.findIndex(i => i.id === item.id);
+      if (removeIdx !== -1) {
+        State.inventory.splice(removeIdx, 1);
+      }
+
+      if (State.selectedItem && State.selectedItem.id === item.id) {
+        State.selectedItem = null;
+      }
 
       Sound.coinRegister();
       Sound.relicFanfare();
@@ -3149,7 +4116,12 @@
       }
 
       const item = State.selectedItem;
-      State.inventory = State.inventory.filter(i => i.id !== item.id);
+
+      // Remove strictly ONLY this single auctioned item
+      const removeIdx = State.inventory.findIndex(i => i.id === item.id);
+      if (removeIdx !== -1) {
+        State.inventory.splice(removeIdx, 1);
+      }
       State.selectedItem = null;
 
       const lot = {
@@ -3231,7 +4203,7 @@
 
     setInterval(() => {
       let updated = false;
-      const bidders = ['ClovisCollector', 'DesertObsidianGuy', 'SciotoRelics', 'OhioFlintGuy', 'ZionHunter', 'PanamintPicker', 'LostLakeHunter'];
+      const bidders = ['ClovisCollector', 'DesertObsidianGuy', 'SciotoRelics', 'OhioFlintGuy', 'ZionHunter', 'PanamintPicker', 'LostLakeHunter', 'DoverCollector', 'SuwanneeDiver'];
 
       for (let i = State.auctions.length - 1; i >= 0; i--) {
         const lot = State.auctions[i];
@@ -3439,14 +4411,20 @@
       loadGameState();
 
       if (State.inventory.length === 0 && State.shadowbox.every(s => s === null)) {
-        const starter1 = generateProceduralArtifact(LITHIC_TYPOLOGIES[0]); // Ohio Clovis
-        const starter2 = generateProceduralArtifact(LITHIC_TYPOLOGIES[7]); // Dovetail
-        const starter3 = generateProceduralArtifact(LITHIC_TYPOLOGIES[9]); // Kirk Serrated
-        const starter4 = generateProceduralArtifact(LITHIC_TYPOLOGIES[25]); // T-Drill
+        const clovisDef = LITHIC_TYPOLOGIES.find(t => t.id === 'type_clovis');
+        const dovetailDef = LITHIC_TYPOLOGIES.find(t => t.id === 'type_dovetail');
+        const kirkDef = LITHIC_TYPOLOGIES.find(t => t.id === 'type_kirk_serrated');
+        const drillDef = LITHIC_TYPOLOGIES.find(t => t.id === 'type_t_drill');
+        const cumberlandDef = LITHIC_TYPOLOGIES.find(t => t.id === 'type_cumberland');
+
+        const starter1 = generateProceduralArtifact(clovisDef);
+        const starter2 = generateProceduralArtifact(dovetailDef);
+        const starter3 = generateProceduralArtifact(kirkDef);
+        const starter4 = generateProceduralArtifact(drillDef);
         certifyRelic(starter2);
 
         State.inventory.push(starter1, starter2, starter3, starter4);
-        State.shadowbox[0] = generateProceduralArtifact(LITHIC_TYPOLOGIES[2], null, 'G10', true); // Cumberland Fluted
+        State.shadowbox[0] = generateProceduralArtifact(cumberlandDef, null, 'G10', true);
       }
 
       populateHuntSiteSelect();
